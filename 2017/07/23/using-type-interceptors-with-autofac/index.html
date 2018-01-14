@@ -10,6 +10,9 @@
 
     <!--Description-->
     
+        <meta name="description" content="Today I’d like to share my first attempt at creating a blog post.
+In this post I’ll try to give a starting point for using Castle Dynamic Proxy interc">
+    
 
     <!--Author-->
     
@@ -69,7 +72,7 @@
 
     <!-- favicon -->
     
-    <link rel="icon" href="/images/2017/07/favicon.png">
+    <link rel="icon" href="/images/theming/favicon.png">
     
 	
 </head>
@@ -147,7 +150,7 @@
     <!-- Page Header -->
 <!-- Set your background image for this header in your post front-matter: cover -->
 
-<header class="intro-header" style="background-image: url('/images/2017/07/background.png')">
+<header class="intro-header" style="background-image: url('/images/theming/background.png')">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -179,18 +182,17 @@
                         
 
 
-<a href="/tags/NET-C-AutoFac-DynamicProxy-AOP-Interceptors/">#
-- .NET
-- C#
-- AutoFac
-- DynamicProxy
-- AOP
-- Interceptors</a>
+<a href="/tags/NET/">#.NET</a> <a href="/tags/C/">#C#</a> <a href="/tags/AutoFac/">#AutoFac</a> <a href="/tags/DynamicProxy/">#DynamicProxy</a> <a href="/tags/AOP/">#AOP</a> <a href="/tags/Interceptors/">#Interceptors</a>
 
 
                     
                 </div>
                 <div class="col-lg-4 col-md-5 post-categories">
+                    
+                        
+
+<a href="/categories/Software-development/">Software development</a>
+
                     
                 </div>
             
@@ -200,7 +202,68 @@
 
             <!-- Post Main Content -->
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                
+                <hr>
+<p>Today I’d like to share my first attempt at creating a blog post.</p>
+<p>In this post I’ll try to give a starting point for using Castle Dynamic Proxy interceptors using AutoFac, though most of it also applies to Castle Windsor.</p>
+<p>I’ll try to cover how it can be helpful using examples.</p>
+<p>If you prefer just to get some sample code instead of reading a blog post, I’ve added a very basic example linked below (I purposely tried to keep it simple):</p>
+<p><a href="https://github.com/maartenderaedemaeker/Simplistic-Autofac-Interceptors-POC/tree/master/AutofacInterceptorPoc" target="_blank" rel="noopener">Sample code</a></p>
+<hr>
+<h1 id="Content"><a href="#Content" class="headerlink" title="Content"></a>Content</h1><ul>
+<li>Cross cutting concerns</li>
+<li>Aspect oriented programming</li>
+<li>Proxy pattern</li>
+<li>Castle Dynamic Proxy</li>
+<li>AutoFac: interceptors</li>
+<li>Conclusion</li>
+</ul>
+<hr>
+<h3 id="Cross-cutting-concerns"><a href="#Cross-cutting-concerns" class="headerlink" title="Cross cutting concerns"></a>Cross cutting concerns</h3><p>To get an idea of what cross cutting concerns are, take a look at the following code sample.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">public void DoSomething()</span><br><span class="line">&#123;</span><br><span class="line">	using(SomeTimeMeasuringHelper.Measure(() =&gt; &#123;</span><br><span class="line">		Log(&quot;Entered DoSomething&quot;);</span><br><span class="line">		try &#123;</span><br><span class="line">			using(var transaction = Helper.StartTransaction())</span><br><span class="line">			&#123;</span><br><span class="line">				Retry(() =&gt; &#123;</span><br><span class="line">					/* MAYBE WE CAN PUT BUSINESS LOGIC HERE? */ </span><br><span class="line">				&#125;);</span><br><span class="line">			&#125;				</span><br><span class="line">		&#125; </span><br><span class="line">        catch(Exception e)</span><br><span class="line">        &#123;</span><br><span class="line">             LogError(e); </span><br><span class="line">             throw;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;))</span><br><span class="line">&#125; // try repeat exactly the same for next method</span><br><span class="line">///oh, and update everywhere if this changes</span><br></pre></td></tr></table></figure></p>
+<p>As you can see, we have quite a bit of code here, and none of it is actually doing any business logic.</p>
+<hr>
+<h3 id="Cross-cutting-concerns-what-are-they"><a href="#Cross-cutting-concerns-what-are-they" class="headerlink" title="Cross cutting concerns: what are they?"></a>Cross cutting concerns: what are they?</h3><p>According to wikipedia:</p>
+<blockquote>
+<p>In aspect-oriented software development, cross-cutting concerns are aspects of a program that affect other concerns. These concerns often cannot be cleanly decomposed from the rest of the system in both the design and implementation, and can result in either scattering (code duplication), tangling (significant dependencies between systems), or both.<br><a href="https://en.wikipedia.org/wiki/Cross-cutting_concern" target="_blank" rel="noopener">Source: wikipedia</a></p>
+</blockquote>
+<p>So, what does that mean? Let’s look back to the previous sample.</p>
+<hr>
+<h3 id="Cross-cutting-concerns-example"><a href="#Cross-cutting-concerns-example" class="headerlink" title="Cross cutting concerns: example"></a>Cross cutting concerns: example</h3><p><img src="/images/2017/07/crosscuttingconcerns.png" alt="Cross cutting concerns example"></p>
+<hr>
+<h3 id="Aspect-Oriented-Programming"><a href="#Aspect-Oriented-Programming" class="headerlink" title="Aspect Oriented Programming"></a>Aspect Oriented Programming</h3><p>So, where does the <em>Cross cutting concern</em> idea come from?<br>Turns out, it is <a href="https://en.wikipedia.org/wiki/Aspect-oriented_software_development" target="_blank" rel="noopener">Aspect Oriented Programming</a>.</p>
+<blockquote>
+<p>Aspect-oriented software development focuses on the identification, specification and representation of cross-cutting concerns and their modularization into separate functional units as well as their automated composition into a working system. (Source: wikipedia)</p>
+</blockquote>
+<p>Right, Aspect Oriented Programming should let us be able to move all these things out of our business code, awesome! But how could we implement this in .NET?</p>
+<p>Turns out, there are multiple ways of doing this.</p>
+<ul>
+<li>One way is to use code weaving (for example: PostSharp). The tool will make sure the aspects (for example logging) will be used by modifying the outputted intermediate language.</li>
+<li>Another way (the way I’m discussing in this post) is to dynamically generate proxy classes. We’ll use the .NET library Castle Dynamic Proxy.</li>
+</ul>
+<hr>
+<h3 id="Proxy-pattern"><a href="#Proxy-pattern" class="headerlink" title="Proxy pattern"></a>Proxy pattern</h3><p>This brings us back to a quick refresher of the proxy pattern, applied to the example.<br>The real <em>Something</em> class and the <em>DoSomething</em> method will not be invoked directly. Instead, another class will do some logic, then (optionally) delegate to the real implementation.Since they both implement the same interface, and the client is calling the object using the interface, the client does not have to know that it is talking to a proxy instead to the original class.</p>
+<p><img src="/images/2017/07/proxy-pattern.png" alt="Proxy pattern"></p>
+<p>So, this is all splendid, but we don’t really want to manually create a proxy class for each type we want to intercept right?</p>
+<hr>
+<h3 id="Castle-Dynamic-Proxy-to-the-rescue"><a href="#Castle-Dynamic-Proxy-to-the-rescue" class="headerlink" title="Castle Dynamic Proxy to the rescue"></a>Castle Dynamic Proxy to the rescue</h3><p>So what is Castle Dynamic proxy?<br>Well, it is a library that allows us to solve the issue of generating proxy classes.</p>
+<ul>
+<li>It generates dynamic proxy classes on the fly</li>
+<li>It allows us to be able to intercept extend behaviour of virtual methods and methods exposed by the interface.</li>
+</ul>
+<p>Why the interface or virtual limitation, you might ask?<br>Castle Dynamic Proxy uses the proxy pattern by using inheritance (just like the ProxySomething class in the previous image).</p>
+<hr>
+<h3 id="Castle-dynamic-proxy-how"><a href="#Castle-dynamic-proxy-how" class="headerlink" title="Castle dynamic proxy: how?"></a>Castle dynamic proxy: how?</h3><p>We can write an AutoFac interceptor by implementing the Castle Dynamic Proxy IInterceptor interface.<br>The interface has one method: intercept, with one argument of the type IInvocation.<br>That object contains information about the invocation that is currently intercepted.<br>By calling the Proceed method, the wrapped invocation is called.</p>
+<h2 id=""><a href="#" class="headerlink" title=""></a><img src="/images/2017/07/interceptor-example.png" alt="Interceptor example"></h2><h3 id="AutoFac-using-interceptors"><a href="#AutoFac-using-interceptors" class="headerlink" title="AutoFac: using interceptors"></a>AutoFac: using interceptors</h3><p>To be able to use interceptors in AutoFac, you need to install the <em>Autofac.Extras.DynamicProxy</em> package (for more information: <a href="http://docs.autofac.org/en/latest/advanced/interceptors.html" target="_blank" rel="noopener">take a look at the AutoFac docs</a>.<br>In your AutoFac container setup you can configure interception. AutoFac will wrap the returned instance with a dynamic proxy.</p>
+<p>So, how do we register the interceptor in our container building logic?</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">builder</span><br><span class="line">    .RegisterType&lt;ConsoleLoggingInterceptor&gt;</span><br><span class="line">    .As&lt;ConsoleLoggingInterceptor&gt;();</span><br><span class="line"></span><br><span class="line">builder</span><br><span class="line">    .RegisterType&lt;ValuesRepository&gt;()</span><br><span class="line">    .As&lt;IValuesRepository&gt;()</span><br><span class="line">    .EnableInterfaceInterceptors() </span><br><span class="line">    // or EnableClassInterceptors() to enable interceptors for virtual members</span><br><span class="line">    .InterceptedBy(typeof(ConsoleLoggingInterceptor));</span><br><span class="line">    // TODO: maybe add more interceptors</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h3><p>So when we look at the changes to our code, we can clearly see the difference.<br>Before adding the interceptors our code looked like:</p>
+<p><img src="/images/2017/07/crosscuttingconcerns.png" alt="Cross cutting concerns example"></p>
+<p>When we use interceptors it would look something like this:</p>
+<p><img src="/images/2017/07/crosscuttingconcerns-intercepted.png" alt="Cross cutting concerns example with interceptors"></p>
+<p>So what happens if we chain these interceptors?<br>Take a look at the image below:</p>
+<p><img src="/images/2017/07/InterceptorDiagram.png" alt="Cross cutting concerns interceptor flow"></p>
+<p>Using interceptors does have a (minor) downside.<br>It becomes a little bit harder to reason about your code, because of the increased complexity. (You do not see all you code at the same spot).<br>I would argue that the benefits of moving the cross cutting concerns away from the business logic makes it very worthwhile though.</p>
+
 
                 
             </div>
