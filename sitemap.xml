@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <url>
+    <loc>https://maartenderaedemaeker.be/categories/index.html</loc>
+    
+    <lastmod>2018-01-14T19:09:21.133Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://maartenderaedemaeker.be/tags/index.html</loc>
+    
+    <lastmod>2018-01-14T19:08:35.505Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://maartenderaedemaeker.be/2017/09/27/analyzing-your-typescript-projects-quality-with-sonarqube/</loc>
+    
+    <lastmod>2017-11-06T06:37:38.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://maartenderaedemaeker.be/2017/11/04/nunit-opencover-results-in-sonarqube/</loc>
+    
+    <lastmod>2017-11-06T06:32:28.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://maartenderaedemaeker.be/2017/10/20/http-caching/</loc>
+    
+    <lastmod>2017-10-23T09:01:46.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://maartenderaedemaeker.be/2017/07/23/using-type-interceptors-with-autofac/</loc>
+    
+    <lastmod>2017-10-03T18:59:51.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://maartenderaedemaeker.be/2017/07/28/using-retirejs/</loc>
+    
+    <lastmod>2017-09-26T12:59:42.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://maartenderaedemaeker.be/2017/08/10/automating-zed-attack-proxy-on-your-build-server/</loc>
+    
+    <lastmod>2017-09-10T19:00:22.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://maartenderaedemaeker.be/2017/08/10/getting-started-with-zed-attack-proxy/</loc>
+    
+    <lastmod>2017-08-28T05:25:13.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://maartenderaedemaeker.be/2017/07/22/setting-up-teamcity-sonarqube-integration-for-a-csharp-project/</loc>
+    
+    <lastmod>2017-08-26T17:31:51.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://maartenderaedemaeker.be/2017/07/27/using-owasp-dependency-check/</loc>
+    
+    <lastmod>2017-08-13T20:40:10.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://maartenderaedemaeker.be/2017/07/23/exploring-sonarqube-concepts/</loc>
+    
+    <lastmod>2017-08-01T19:26:46.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://maartenderaedemaeker.be/2017/07/23/getting-started-with-sonarqube-on-a-csharp-project/</loc>
+    
+    <lastmod>2017-07-26T12:11:00.000Z</lastmod>
+    
+  </url>
+  
+</urlset>
