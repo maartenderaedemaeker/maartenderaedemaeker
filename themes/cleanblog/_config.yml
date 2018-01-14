@@ -12,7 +12,7 @@ menu:
 menu_title:
 
 # URL of the Home page image
-index_cover: /images/2017/07/background.png
+index_cover: /images/theming/background.png
 
 # Default post title
 default_post_title: Untitled
@@ -34,7 +34,7 @@ google_analytics:
 addthis:
 
 # set your own favicon
-favicon: /images/2017/07/favicon.png
+favicon: /images/theming/favicon.png
 
 # Social Accounts
 twitter_url:
