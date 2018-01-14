@@ -181,7 +181,7 @@
                         
 
 
-<a href="/tags/NET/">#.NET</a> <a href="/tags/C/">#C#</a> <a href="/tags/SonarQube/">#SonarQube</a> <a href="/tags/Code-quality/">#Code quality</a> <a href="/tags/Testing/">#Testing</a>
+<a href="/tags/SonarQube/">#SonarQube</a> <a href="/tags/Code-quality/">#Code quality</a> <a href="/tags/C/">#C#</a> <a href="/tags/NET/">#.NET</a> <a href="/tags/Testing/">#Testing</a>
 
 
                     
@@ -210,7 +210,7 @@
 </ul>
 <p>In this blogpost, I’ll be using NUnit as my unit testing framework.<br><a name="using-opencover"></a></p>
 <h1 id="Using-OpenCover"><a href="#Using-OpenCover" class="headerlink" title="Using OpenCover"></a>Using OpenCover</h1><p>In my solution, I’ve added the OpenCover and NUnit.ConsoleRunner nuget packages.<br>If I take a look in my packages folder, I can find the corresponding packages.</p>
-<p><img src="/content/images/2017/11/2017-11-05-09_13_58-packages.png" alt="2017-11-05-09_13_58-packages"></p>
+<p><img src="/images/2017/11/2017-11-05-09_13_58-packages.png" alt="2017-11-05-09_13_58-packages"></p>
 <p>We are interested in the following two executables included in these packages:</p>
 <ul>
 <li><code>{OpenCoverFolder}\tools\OpenCover.Console.exe</code></li>
@@ -227,7 +227,7 @@
 <li>We specify the <code>-output</code> parameter to choose a file where the OpenCover results get written to.</li>
 </ul>
 <p>When running the command, we can see NUnit running the test and the code coverage results being written.</p>
-<p><img src="/content/images/2017/11/2017-11-05-09_31_16-Cmder.png" alt="2017-11-05-09_31_16-Cmder"></p>
+<p><img src="/images/2017/11/2017-11-05-09_31_16-Cmder.png" alt="2017-11-05-09_31_16-Cmder"></p>
 <p><a name="coverage-results"></a></p>
 <h1 id="Adding-test-coverage-results-to-SonarQube"><a href="#Adding-test-coverage-results-to-SonarQube" class="headerlink" title="Adding test coverage results to SonarQube"></a>Adding test coverage results to SonarQube</h1><p>If you need a refresher on how to use the SonarQube scanner for msbuild, take a look at <a href="/2017/07/16/getting-started-with-sonarqube-on-a-csharp-project/">my previous post about getting started with SonarQube on a C# project</a>.</p>
 <p>The general steps we need to take when running a SonarQube scan on a .NET project are the following:</p>
@@ -246,7 +246,7 @@
 <p>Now we know how to generate a code coverage result file, we can make SonarQube aware of where to pick up the results.</p>
 <p>We can do this by modifying step 1 and specifying the <code>sonar.cs.opencover.reportsPaths</code> property in our SonarQube scanner command like this:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/d:&apos;sonar.cs.opencover.reportsPaths=opencover.xml&apos;</span><br></pre></td></tr></table></figure></p>
 <p>SonarQube will pick up our code coverage and show it in our projects dashboard:</p>
-<p><img src="/content/images/2017/11/2017-11-05-11_09_47-SonarQubeNUnitIntegrationDemo.png" alt="2017-11-05-11_09_47-SonarQubeNUnitIntegrationDemo"></p>
+<p><img src="/images/2017/11/2017-11-05-11_09_47-SonarQubeNUnitIntegrationDemo.png" alt="2017-11-05-11_09_47-SonarQubeNUnitIntegrationDemo"></p>
 
 
                 
@@ -256,6 +256,12 @@
             
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                     
+    <hr />
+    <h3>Comments:</h3>
+    <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </div>
+
 
 
                 </div>
@@ -322,6 +328,18 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
 
 <!-- Disqus Comments -->
+
+<script type="text/javascript">
+    var disqus_shortname = 'maarten-de-raedemaeker';
+
+    (function(){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
 
 
 

@@ -181,7 +181,7 @@
                         
 
 
-<a href="/tags/C/">#C#</a> <a href="/tags/SonarQube/">#SonarQube</a> <a href="/tags/Security-Testing/">#Security Testing</a> <a href="/tags/Java/">#Java</a>
+<a href="/tags/SonarQube/">#SonarQube</a> <a href="/tags/C/">#C#</a> <a href="/tags/Security-Testing/">#Security Testing</a> <a href="/tags/Java/">#Java</a>
 
 
                     
@@ -220,23 +220,23 @@
 <p>For more information: visit <a href="https://www.owasp.org/index.php/Main_Page" target="_blank">OWASP</a>.</p>
 <h1 id="Using-components-with-known-vulnerabilities"><a href="#Using-components-with-known-vulnerabilities" class="headerlink" title="Using components with known vulnerabilities"></a><a name="knownvulnerabilities"></a>Using components with known vulnerabilities</h1><p>One of the risks in the top 10 is using components with known vulnerabilities.<br>This boils down on being dependent on libraries / frameworks / tools with known security risks.<br>These vulnerabilities are often called CVE’s (Common Known Vulnerabilities). You can look them up on sites such as <a href="https://www.cvedetails.com/" target="_blank" rel="noopener">these</a>.</p>
 <h1 id="OWASP-Dependency-check"><a href="#OWASP-Dependency-check" class="headerlink" title=" OWASP Dependency check"></a><a name="owaspdependencycheck"></a> OWASP Dependency check</h1><p>OWASP Dependency check is a project run by OWASP that allows us to scan .NET and Java projects. The tool also has experimental support for a few other languages.<br><a href="https://www.owasp.org/index.php/OWASP_Dependency_Check" target="_blank" rel="noopener">You can get more info here.</a></p>
-<h1 id="Using-OWASP-dependency-check"><a href="#Using-OWASP-dependency-check" class="headerlink" title=" Using OWASP dependency check"></a><a name="usingdependencycheck"></a> Using OWASP dependency check</h1><p>So, let’s get our hands dirty. First of all, you can download the commandline version <a href="https://www.owasp.org/index.php/OWASP_Dependency_Check" target="_blank" rel="noopener"> here </a>.<br><img src="/content/images/2017/07/Downloading_owasp_dependencycheck.png" alt="Downloading_owasp_dependencycheck"></p>
+<h1 id="Using-OWASP-dependency-check"><a href="#Using-OWASP-dependency-check" class="headerlink" title=" Using OWASP dependency check"></a><a name="usingdependencycheck"></a> Using OWASP dependency check</h1><p>So, let’s get our hands dirty. First of all, you can download the commandline version <a href="https://www.owasp.org/index.php/OWASP_Dependency_Check" target="_blank" rel="noopener"> here </a>.<br><img src="/images/2017/07/27/Downloading_owasp_dependencycheck.png" alt="Downloading_owasp_dependencycheck"></p>
 <p>After downloading, I extracted the tool to C:\tools\dependency-check and added the bin folder to my path variable.</p>
 <p>Ok. Now I can use the tool from cmd or powershell window. First of all the tool will start downloading definitions for known vulnerabilities (which takes a while the first time, after that, only updates are retrieved).</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dependency-check --scan &lt;folder to scan&gt; --project &lt;project name used in report&gt;</span><br></pre></td></tr></table></figure>
-<p><img src="/content/images/2017/07/Downloading_owasp_dependencycheck-1.png" alt="Downloading_owasp_dependencycheck-1"></p>
-<p>After updating, the scan will start. When the scan is done, you’ll notice the output (a HTML file). When opening the file, you’ll see an overview of possible issues and links to why they may be an issue. <img src="/content/images/2017/07/DependencyCheckResults.png" alt="DependencyCheckResults">.</p>
+<p><img src="/images/2017/07/27/Downloading_owasp_dependencycheck-1.png" alt="Downloading_owasp_dependencycheck-1"></p>
+<p>After updating, the scan will start. When the scan is done, you’ll notice the output (a HTML file). When opening the file, you’ll see an overview of possible issues and links to why they may be an issue. <img src="/images/2017/07/27/DependencyCheckResults.png" alt="DependencyCheckResults">.</p>
 <p>Great, we now know how to get started! :-)</p>
 <h1 id="Getting-OWASP-dependency-check-reports-in-SonarQube"><a href="#Getting-OWASP-dependency-check-reports-in-SonarQube" class="headerlink" title=" Getting OWASP dependency check reports in SonarQube"></a><a name="dependencychecksonar"></a> Getting OWASP dependency check reports in SonarQube</h1><p>We can import our OWASP Dependency check reports in SonarQube by using following <a href="https://github.com/stevespringett/dependency-check-sonar-plugin" target="_blank" rel="noopener">plugin.</a></p>
 <p>To install it, copy the downloaded jar file to <your sonar="" installation="" path="">\extensions\plugins and restart the SonarQube service.</your></p>
-<p>You should now see the plugin in the SonarQube update center.<br><img src="/content/images/2017/07/SonarInstalled.png" alt="SonarInstalled"></p>
+<p>You should now see the plugin in the SonarQube update center.<br><img src="/images/2017/07/27/SonarInstalled.png" alt="SonarInstalled"></p>
 <p>We can use the report created by OWASP Dependency check if we make sure we choose the xml format instead of the default html. (see below)</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dependency-check --scan &lt;folder to scan&gt; --project &lt;project name used in report&gt; -f XML</span><br></pre></td></tr></table></figure>
 <p>Now, if we specify the following flag while executing our Sonar Scanner, the generated xml file will be submitted as well.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/d:&quot;sonar.dependencyCheck.reportPath=&lt;FILL_PATH_TO_REPORT_XML_IN_HERE&gt;&quot;</span><br></pre></td></tr></table></figure></p>
 <p>I had some issues to get this setup at first. The latest binary download was not compatible with my 6.X SonarQube instance, but cloning the git repository and building it locally worked for me. I also needed to specify the full path to the report to make it work.</p>
-<p>When running the scan, you should see something like this in your output:<br><img src="/content/images/2017/07/DepCheck.png" alt="DepCheck"></p>
+<p>When running the scan, you should see something like this in your output:<br><img src="/images/2017/07/27/DepCheck.png" alt="DepCheck"></p>
 <p>When looking at the issues on your SonarQube, you should notice them showing up as vulnerabilities.</p>
-<p><img src="/content/images/2017/07/DependencyIssues.PNG" alt="DependencyIssues"></p>
+<p><img src="/images/2017/07/27/DependencyIssues.PNG" alt="DependencyIssues"></p>
 <h1 id="Conclusion"><a href="#Conclusion" class="headerlink" title=" Conclusion"></a><a name="conclusion"></a> Conclusion</h1><p>I really like this “low-effort way” of creating visibility for the “Using components with known vulnerabilities” - risk and keeping track of the issues they bring in C# / Java code. I will take some time later on to figure out and create a blog about finding these issues on NodeJS / Front end Javascript, for a more complete approach.</p>
 
 
@@ -247,6 +247,12 @@
             
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                     
+    <hr />
+    <h3>Comments:</h3>
+    <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </div>
+
 
 
                 </div>
@@ -313,6 +319,18 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
 
 <!-- Disqus Comments -->
+
+<script type="text/javascript">
+    var disqus_shortname = 'maarten-de-raedemaeker';
+
+    (function(){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
 
 
 
