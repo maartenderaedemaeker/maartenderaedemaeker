@@ -45,7 +45,7 @@ OWASP Dependency check is a project run by OWASP that allows us to scan .NET and
 
 # <a name="usingdependencycheck"></a> Using OWASP dependency check
 So, let's get our hands dirty. First of all, you can download the commandline version <a href="https://www.owasp.org/index.php/OWASP_Dependency_Check"> here </a>.
-![Downloading_owasp_dependencycheck](/content/images/2017/07/Downloading_owasp_dependencycheck.png)
+![Downloading_owasp_dependencycheck](/images/2017/07/27/Downloading_owasp_dependencycheck.png)
 
 After downloading, I extracted the tool to C:\tools\dependency-check and added the bin folder to my path variable.
 
@@ -55,9 +55,9 @@ Ok. Now I can use the tool from cmd or powershell window. First of all the tool 
 dependency-check --scan <folder to scan> --project <project name used in report>
 ```
 
-![Downloading_owasp_dependencycheck-1](/content/images/2017/07/Downloading_owasp_dependencycheck-1.png)
+![Downloading_owasp_dependencycheck-1](/images/2017/07/27/Downloading_owasp_dependencycheck-1.png)
 
-After updating, the scan will start. When the scan is done, you'll notice the output (a HTML file). When opening the file, you'll see an overview of possible issues and links to why they may be an issue. ![DependencyCheckResults](/content/images/2017/07/DependencyCheckResults.png).
+After updating, the scan will start. When the scan is done, you'll notice the output (a HTML file). When opening the file, you'll see an overview of possible issues and links to why they may be an issue. ![DependencyCheckResults](/images/2017/07/27/DependencyCheckResults.png).
 
 Great, we now know how to get started! :-)
 
@@ -67,7 +67,7 @@ We can import our OWASP Dependency check reports in SonarQube by using following
 To install it, copy the downloaded jar file to <your sonar installation path>\extensions\plugins and restart the SonarQube service.
 
 You should now see the plugin in the SonarQube update center.
-![SonarInstalled](/content/images/2017/07/SonarInstalled.png)
+![SonarInstalled](/images/2017/07/27/SonarInstalled.png)
 
 We can use the report created by OWASP Dependency check if we make sure we choose the xml format instead of the default html. (see below)
 
@@ -83,11 +83,11 @@ Now, if we specify the following flag while executing our Sonar Scanner, the gen
 I had some issues to get this setup at first. The latest binary download was not compatible with my 6.X SonarQube instance, but cloning the git repository and building it locally worked for me. I also needed to specify the full path to the report to make it work.
 
 When running the scan, you should see something like this in your output:
-![DepCheck](/content/images/2017/07/DepCheck.png)
+![DepCheck](/images/2017/07/27/DepCheck.png)
 
 When looking at the issues on your SonarQube, you should notice them showing up as vulnerabilities.
 
-![DependencyIssues](/content/images/2017/07/DependencyIssues.PNG)
+![DependencyIssues](/images/2017/07/27/DependencyIssues.PNG)
 
 # <a name="conclusion"></a> Conclusion
 I really like this "low-effort way" of creating visibility for the "Using components with known vulnerabilities" - risk and keeping track of the issues they bring in C# / Java code. I will take some time later on to figure out and create a blog about finding these issues on NodeJS / Front end Javascript, for a more complete approach.

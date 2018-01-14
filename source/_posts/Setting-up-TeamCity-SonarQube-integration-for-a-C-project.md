@@ -13,7 +13,7 @@ id: 59d3e06faf4f1298d16e0ec2
 updated: '2017-08-26 19:31:51'
 date: 2017-07-23 14:55:06
 ---
-This blog post follows my previous post ["Getting started with SonarQube on a C# project"](/2017/07/22/Setting-up-TeamCity-SonarQube-integration-for-a-Csharp-project/).
+This blog post follows my previous post ["Getting started with SonarQube on a C# project"](/2017/07/23/getting-started-with-sonarqube-on-a-csharp-project/).
 In my first attempt of integrating TeamCity and SonarQube I tried to use [TeamCity SonarQube plugin](https://confluence.jetbrains.com/display/TW/SonarQube+Integration), but it seems to be abandoned as the specific documentation for the runner this plugin relies on doesn't seem to exist anymore [runner documentation](http://docs.codehaus.org/display/SONAR/Analysis+Parameters).
 That's why this post will just use the command-line tools available, with the added bonus advantage of easier portability over different types of build servers.
 You can check out the source code analyzed at [github](https://github.com/maartenderaedemaeker/Automated-SecurityTesting-Demo/tree/part1).
@@ -36,15 +36,15 @@ choco install -y microsoft-build-tools msbuild-sonarqube-runner
 
 Since this is a new project in TeamCity, I'll start with creating a project.
 
-![Teamcity-SonarQube-3](/content/images/2017/07/Teamcity-SonarQube-3.png)
+![Teamcity-SonarQube-3](/images/2017/07/23/Teamcity-SonarQube-3.png)
 
 After clicking through the wizard, TeamCity discovered one build step for my project.
 I'd like to start with a clean slate and click on configure build steps manually.
 
-![Teamcity-SonarQube-4](/content/images/2017/07/Teamcity-SonarQube-4.png)
+![Teamcity-SonarQube-4](/images/2017/07/23/Teamcity-SonarQube-4.png)
 
 We're going to create 4 build steps.
-![Teamcity-SonarQube-5](/content/images/2017/07/Teamcity-SonarQube-5.png)
+![Teamcity-SonarQube-5](/images/2017/07/23/Teamcity-SonarQube-5.png)
 
 * Step 1: 
     Runner type: "NuGet Installer"
@@ -70,7 +70,7 @@ This step will submit the analysis to SonarQube.
 
 After defining these steps we'll also need to define the parameters used in the commands.
 Using these allows us to only need to change their value in one place. If you want, you could set this parameters globally at your root project, or for all your builds on this specific project. 
-![Teamcity-SonarQube-6](/content/images/2017/07/Teamcity-SonarQube-6.png)
+![Teamcity-SonarQube-6](/images/2017/07/23/Teamcity-SonarQube-6.png)
 
 # Step 3: Test the configuration
 

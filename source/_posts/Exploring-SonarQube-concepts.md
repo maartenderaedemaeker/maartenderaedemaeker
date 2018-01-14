@@ -28,7 +28,7 @@ We'll start from [the following source code](https://github.com/maartenderaedema
 
 As a guide for exploring the SonarQube concepts, I've added an overview image below.
 
-![Overview](/content/images/2017/07/Overview.png)
+![Overview](/images/2017/07/23/Overview.png)
 # <a name="quality-profiles"></a>Quality profiles
 
 A quality profile contains a set of [rules](#rules) used to generate [issues](#issues) for a [snaphot](#snapshots) when a new analysis is submitted to the server.
@@ -37,17 +37,17 @@ By default, one quality profile "Sonar way" is provided for each language we use
 It is recommended to copy the profile for our project and tweak it to our needs.
 To do this, we need to visit the dashboard and navigate to each of the quality profiles.
 
-![quality-profiles-1](/content/images/2017/07/quality-profiles-1.png)
-![quality-profiles-2](/content/images/2017/07/quality-profiles-2.png)
+![quality-profiles-1](/images/2017/07/23/quality-profiles-1.png)
+![quality-profiles-2](/images/2017/07/23/quality-profiles-2.png)
 
 After choosing a new name for our quality profile, we need to assign it to be used in our project.
 
-![quality-profiles-3](/content/images/2017/07/quality-profiles-3.png)
-![quality-profiles-4](/content/images/2017/07/quality-profiles-4.png)
+![quality-profiles-3](/images/2017/07/23/quality-profiles-3.png)
+![quality-profiles-4](/images/2017/07/23/quality-profiles-4.png)
 
 You'll notice that the quality profiles will still show as "Sonar way". When we run the analyzer again, it gets updated.
 
-![quality-profiles-5](/content/images/2017/07/quality-profiles-5.png)
+![quality-profiles-5](/images/2017/07/23/quality-profiles-5.png)
 
 After copying all of  the profiles, we'll take a look at how [rules](#rules) are used in the profile.
 
@@ -57,8 +57,8 @@ The goal of rules is to detect issues.
 There are a nice set of predefined sets,  you're also able to create steps with custom rules using templates or even write your own Roslyn analyzer.
 Let's take a look at a predefined example.
 
-![rules-1](/content/images/2017/07/rules-1.png)
-![rules-2](/content/images/2017/07/rules-2.png)
+![rules-1](/images/2017/07/23/rules-1.png)
+![rules-2](/images/2017/07/23/rules-2.png)
 
 This rule is enabled by default in the "vulnerabilities" section. It does not allow public static fields which are mutable.
 
@@ -67,22 +67,22 @@ To demonstrate SonarQube rules, I've added a file to my project with several iss
 As you can see in the image below, my project is not scoring well at all. SonarQube has detected a bunch of issues.
 
 <a name="rules3"></a>
-![rules-3](/content/images/2017/07/rules-3.png)
+![rules-3](/images/2017/07/23/rules-3.png)
 
 I can navigate to the file I've added and zoom in on the specific issues by going to the code tab and navigating through my code structure.
-![rules-4](/content/images/2017/07/rules-4.png)
+![rules-4](/images/2017/07/23/rules-4.png)
 
 SonarQube also makes a list of issues with an estimated "time needed to fix", which is summed to the total number as show in [this image](#rules3) .
-![rules-5](/content/images/2017/07/rules-5.png)
+![rules-5](/images/2017/07/23/rules-5.png)
 
 # <a name="metrics"></a>Metrics
 
 A metric is something that can be [measured](#measures).
 As the [documentation](web_api/api/metrics/search) points out, they can either by a qualitative or quantitative metric.
 Quantitative metrics, like for example number of line of counts do not give quality indications.
-![metrics-1](/content/images/2017/07/metrics-1.png)
+![metrics-1](/images/2017/07/23/metrics-1.png)
 Qualitative metrics, on the other hand, do say something about quality. Their [measures](#measures) impact scores such as reliability, security and maintainability.
-![metrics-2](/content/images/2017/07/metrics-2.png)
+![metrics-2](/images/2017/07/23/metrics-2.png)
 
 # <a name="measures"></a>Measures
 
@@ -96,17 +96,17 @@ If a violation on a [rule](#rules) is found, issues are added to the [snapshot](
 
 * *Bugs* could be potential points of failure in your code.
 For example: 
-![issues-1](/content/images/2017/07/issues-1.png)
+![issues-1](/images/2017/07/23/issues-1.png)
 Also note the nice way of documenting the rule, complete with instructive examples.
-![issues-2](/content/images/2017/07/issues-2.png)
+![issues-2](/images/2017/07/23/issues-2.png)
 
 * *Code smells* are issues that have maintainability impact.
 For example:
-![issues-3](/content/images/2017/07/issues-3.png)
+![issues-3](/images/2017/07/23/issues-3.png)
 
 * *Vulnerabilities* are security related issues.
 For example
-![issues-4](/content/images/2017/07/issues-4.png)
+![issues-4](/images/2017/07/23/issues-4.png)
 
 # <a name="snapshots"></a>Snapshots
 
@@ -118,8 +118,8 @@ They have a set of [measures](#measures) containing values for [metrics](#metric
 A quality gate is a group of requirements that needs to be met to achieve "enough" quality for a given [snapshot](#snapshots) to be release-ready.
 By default SonarQube provides one.
 
-![quality-profiles-1-1](/content/images/2017/07/quality-profiles-1-1.png)
-![quality-profiles-2-1](/content/images/2017/07/quality-profiles-2-1.png)
+![quality-profiles-1-1](/images/2017/07/23/quality-profiles-1-1.png)
+![quality-profiles-2-1](/images/2017/07/23/quality-profiles-2-1.png)
 
 # For more information: take a look at the SonarQube documentation
 
