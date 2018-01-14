@@ -227,7 +227,7 @@ In this post I’ll try to give a starting point for using Castle Dynamic Proxy 
 </blockquote>
 <p>So, what does that mean? Let’s look back to the previous sample.</p>
 <hr>
-<h3 id="Cross-cutting-concerns-example"><a href="#Cross-cutting-concerns-example" class="headerlink" title="Cross cutting concerns: example"></a>Cross cutting concerns: example</h3><p><img src="/images/2017/07/crosscuttingconcerns.png" alt="Cross cutting concerns example"></p>
+<h3 id="Cross-cutting-concerns-example"><a href="#Cross-cutting-concerns-example" class="headerlink" title="Cross cutting concerns: example"></a>Cross cutting concerns: example</h3><p><img src="/images/2017/07/23/crosscuttingconcerns.png" alt="Cross cutting concerns example"></p>
 <hr>
 <h3 id="Aspect-Oriented-Programming"><a href="#Aspect-Oriented-Programming" class="headerlink" title="Aspect Oriented Programming"></a>Aspect Oriented Programming</h3><p>So, where does the <em>Cross cutting concern</em> idea come from?<br>Turns out, it is <a href="https://en.wikipedia.org/wiki/Aspect-oriented_software_development" target="_blank" rel="noopener">Aspect Oriented Programming</a>.</p>
 <blockquote>
@@ -241,7 +241,7 @@ In this post I’ll try to give a starting point for using Castle Dynamic Proxy 
 </ul>
 <hr>
 <h3 id="Proxy-pattern"><a href="#Proxy-pattern" class="headerlink" title="Proxy pattern"></a>Proxy pattern</h3><p>This brings us back to a quick refresher of the proxy pattern, applied to the example.<br>The real <em>Something</em> class and the <em>DoSomething</em> method will not be invoked directly. Instead, another class will do some logic, then (optionally) delegate to the real implementation.Since they both implement the same interface, and the client is calling the object using the interface, the client does not have to know that it is talking to a proxy instead to the original class.</p>
-<p><img src="/images/2017/07/proxy-pattern.png" alt="Proxy pattern"></p>
+<p><img src="/images/2017/07/23/proxy-pattern.png" alt="Proxy pattern"></p>
 <p>So, this is all splendid, but we don’t really want to manually create a proxy class for each type we want to intercept right?</p>
 <hr>
 <h3 id="Castle-Dynamic-Proxy-to-the-rescue"><a href="#Castle-Dynamic-Proxy-to-the-rescue" class="headerlink" title="Castle Dynamic Proxy to the rescue"></a>Castle Dynamic Proxy to the rescue</h3><p>So what is Castle Dynamic proxy?<br>Well, it is a library that allows us to solve the issue of generating proxy classes.</p>
@@ -252,16 +252,16 @@ In this post I’ll try to give a starting point for using Castle Dynamic Proxy 
 <p>Why the interface or virtual limitation, you might ask?<br>Castle Dynamic Proxy uses the proxy pattern by using inheritance (just like the ProxySomething class in the previous image).</p>
 <hr>
 <h3 id="Castle-dynamic-proxy-how"><a href="#Castle-dynamic-proxy-how" class="headerlink" title="Castle dynamic proxy: how?"></a>Castle dynamic proxy: how?</h3><p>We can write an AutoFac interceptor by implementing the Castle Dynamic Proxy IInterceptor interface.<br>The interface has one method: intercept, with one argument of the type IInvocation.<br>That object contains information about the invocation that is currently intercepted.<br>By calling the Proceed method, the wrapped invocation is called.</p>
-<h2 id=""><a href="#" class="headerlink" title=""></a><img src="/images/2017/07/interceptor-example.png" alt="Interceptor example"></h2><h3 id="AutoFac-using-interceptors"><a href="#AutoFac-using-interceptors" class="headerlink" title="AutoFac: using interceptors"></a>AutoFac: using interceptors</h3><p>To be able to use interceptors in AutoFac, you need to install the <em>Autofac.Extras.DynamicProxy</em> package (for more information: <a href="http://docs.autofac.org/en/latest/advanced/interceptors.html" target="_blank" rel="noopener">take a look at the AutoFac docs</a>.<br>In your AutoFac container setup you can configure interception. AutoFac will wrap the returned instance with a dynamic proxy.</p>
+<h2 id=""><a href="#" class="headerlink" title=""></a><img src="/images/2017/07/23/interceptor-example.png" alt="Interceptor example"></h2><h3 id="AutoFac-using-interceptors"><a href="#AutoFac-using-interceptors" class="headerlink" title="AutoFac: using interceptors"></a>AutoFac: using interceptors</h3><p>To be able to use interceptors in AutoFac, you need to install the <em>Autofac.Extras.DynamicProxy</em> package (for more information: <a href="http://docs.autofac.org/en/latest/advanced/interceptors.html" target="_blank" rel="noopener">take a look at the AutoFac docs</a>.<br>In your AutoFac container setup you can configure interception. AutoFac will wrap the returned instance with a dynamic proxy.</p>
 <p>So, how do we register the interceptor in our container building logic?</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">builder</span><br><span class="line">    .RegisterType&lt;ConsoleLoggingInterceptor&gt;</span><br><span class="line">    .As&lt;ConsoleLoggingInterceptor&gt;();</span><br><span class="line"></span><br><span class="line">builder</span><br><span class="line">    .RegisterType&lt;ValuesRepository&gt;()</span><br><span class="line">    .As&lt;IValuesRepository&gt;()</span><br><span class="line">    .EnableInterfaceInterceptors() </span><br><span class="line">    // or EnableClassInterceptors() to enable interceptors for virtual members</span><br><span class="line">    .InterceptedBy(typeof(ConsoleLoggingInterceptor));</span><br><span class="line">    // TODO: maybe add more interceptors</span><br></pre></td></tr></table></figure>
 <hr>
 <h3 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h3><p>So when we look at the changes to our code, we can clearly see the difference.<br>Before adding the interceptors our code looked like:</p>
-<p><img src="/images/2017/07/crosscuttingconcerns.png" alt="Cross cutting concerns example"></p>
+<p><img src="/images/2017/07/23/crosscuttingconcerns.png" alt="Cross cutting concerns example"></p>
 <p>When we use interceptors it would look something like this:</p>
-<p><img src="/images/2017/07/crosscuttingconcerns-intercepted.png" alt="Cross cutting concerns example with interceptors"></p>
+<p><img src="/images/2017/07/23/crosscuttingconcerns-intercepted.png" alt="Cross cutting concerns example with interceptors"></p>
 <p>So what happens if we chain these interceptors?<br>Take a look at the image below:</p>
-<p><img src="/images/2017/07/InterceptorDiagram.png" alt="Cross cutting concerns interceptor flow"></p>
+<p><img src="/images/2017/07/23/InterceptorDiagram.png" alt="Cross cutting concerns interceptor flow"></p>
 <p>Using interceptors does have a (minor) downside.<br>It becomes a little bit harder to reason about your code, because of the increased complexity. (You do not see all you code at the same spot).<br>I would argue that the benefits of moving the cross cutting concerns away from the business logic makes it very worthwhile though.</p>
 
 

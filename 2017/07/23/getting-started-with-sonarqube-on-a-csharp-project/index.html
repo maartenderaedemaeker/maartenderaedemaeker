@@ -10,6 +10,9 @@
 
     <!--Description-->
     
+        <meta name="description" content="I’d like to share my journey discovering how to use SonarQube.
+In this post I’ll go through the basics of SonarQube using their cloud offering (SonarC">
+    
 
     <!--Author-->
     
@@ -179,15 +182,17 @@
                         
 
 
-<a href="/tags/SonarQube-Code-quality-C/">#
-- SonarQube
-- Code quality
-- C#</a>
+<a href="/tags/C/">#C#</a> <a href="/tags/SonarQube/">#SonarQube</a> <a href="/tags/Code-quality/">#Code quality</a>
 
 
                     
                 </div>
                 <div class="col-lg-4 col-md-5 post-categories">
+                    
+                        
+
+<a href="/categories/Software-development/">Software development</a>
+
                     
                 </div>
             
@@ -197,7 +202,53 @@
 
             <!-- Post Main Content -->
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                
+                <p>I’d like to share my journey discovering how to use SonarQube.</p>
+<p>In this post I’ll go through the basics of SonarQube using their cloud offering (<a href="https://about.sonarcloud.io" target="_blank" rel="noopener">SonarCloud</a>), though, I’m guessing most of what I’ve written should also apply to the on-premise version.</p>
+<p>In this blog post I’ll keep it simple and focus on the getting started with SonarQube part. Later on I plan to get into more detail on stuff like “rules”, “measures”, “metrics” and build server integration.</p>
+<p>You can check out the source code analyzed at <a href="https://github.com/maartenderaedemaeker/Automated-SecurityTesting-Demo/tree/part1" target="_blank" rel="noopener">github</a>.</p>
+<h1 id="Table-of-contents"><a href="#Table-of-contents" class="headerlink" title="Table of contents"></a>Table of contents</h1><ul>
+<li>What is SonarQube</li>
+<li>Step 1: Creating a SonarCloud account</li>
+<li>Step 2: Setup tools</li>
+<li>Step 3: Execute our first run</li>
+<li>Step 4: Taking a look at the results</li>
+<li>Conclusion</li>
+</ul>
+<h1 id="What-is-SonarQube"><a href="#What-is-SonarQube" class="headerlink" title="What is SonarQube"></a>What is SonarQube</h1><p>As far as I understand SonarQube is a tool that helps you analyze code quality using <a href="https://en.wikipedia.org/wiki/Static_program_analysis" target="_blank" rel="noopener">static analysis</a>.<br>You can create rulesets used for inspection and define quality gates (this allows you to set minimum standards for acceptable quality).<br>It is able to detect code smells, several security vulnerabilities and help detecting bugs.<br>I also love their <a href="https://docs.sonarqube.org/display/HOME/Fixing+the+Water+Leak" target="_blank" rel="noopener">fixing the water leak analogy</a>, it seems like a good way to approach <a href="https://en.wikipedia.org/wiki/Technical_debt" target="_blank" rel="noopener">technical debt</a>.<br>Making technical debt and quality issues visible and comparing the evolution over time seems incredibly useful. </p>
+<h1 id="Step-1-Creating-a-SonarCloud-account"><a href="#Step-1-Creating-a-SonarCloud-account" class="headerlink" title="Step 1: Creating a SonarCloud account"></a>Step 1: Creating a SonarCloud account</h1><p>To create a project in SonarCloud, you should create your account at <a href="https://about.sonarcloud.io/" target="_blank" rel="noopener">this page</a>, which is free for open source projects. (the self hosted community version is free, a <a href="https://www.sonarsource.com/solutions/deployments/team-grade/" target="_blank" rel="noopener">paid commercial version</a> with extra features / languages / support is available as well)<br>After creating your account you should retrieve 2 pieces of information in the SonarQube’s account section.<br>You can navigate to this section using the menu in the top right corner.<br><img src="/images/2017/07/23/SonarQube-step-1.png" alt="SonarQube-step-1"></p>
+<p>You will need:</p>
+<ul>
+<li>Your organization</li>
+</ul>
+<p><img src="/images/2017/07/23/SonarQube-step-2.png" alt="SonarQube-step-2"><br>You can copy it from the section marked in the image above with “1”, or create one using the create button marked with “2”.<br>In my case: “maartenderaedemaeker-github”.</p>
+<ul>
+<li>An authentication token</li>
+</ul>
+<p><img src="/images/2017/07/23/SonarQube-step-3.png" alt="SonarQube-step-3"><br>The token can be generated and copied from the security tab. Make sure to copy-paste it somewhere, because we’ll need it in the next step.</p>
+<h1 id="Step-2-Setup-tools"><a href="#Step-2-Setup-tools" class="headerlink" title="Step 2: Setup tools"></a>Step 2: Setup tools</h1><p>To be able to run the SonarQube msbuild analyzer we need to have 2 command line tools in our path.</p>
+<ol>
+<li>msbuild</li>
+</ol>
+<p>If you have Visual Studio installed you can find your installation directory by executing ‘C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe’<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># In powershell window</span><br><span class="line">&amp; &apos;C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe&apos;</span><br></pre></td></tr></table></figure></p>
+<p><img src="/images/2017/07/23/msbuild-optionA.png" alt="msbuild-optionA"></p>
+<p>In my case it’s “C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise”, so I’d add “C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin” to my “PATH” environment variable.</p>
+<p>Otherwise you can download <a href="https://www.visualstudio.com/downloads/#build-tools-for-visual-studio-2017" target="_blank" rel="noopener">“Build tools for Visual Studio 2017”</a> from Microsoft, and add the path to the bin folder to your “PATH” environment variable.</p>
+<ol>
+<li>SonarQube Scanner for MSBuild</li>
+</ol>
+<p>You can download the SonarQube Scanner for MSBuild <a href="https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner+for+MSBuild" target="_blank" rel="noopener">here</a>.<br>I’ve extracted the zip file to my ‘C:\tools’ directory and added the folder containing the binaries to my PATH variable.</p>
+<p>Verify the tools are working by opening a new commandline or powershell window and verifying that the tools are found:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">msbuild /?</span><br><span class="line">SonarQube.Scanner.MSBuild /?</span><br></pre></td></tr></table></figure></p>
+<p>If you get output explaining how to use the tools, your PATH variable is set correctly. If not, verify if the directories are in your PATH variable, re-open a commandline window and try again.</p>
+<p>You also need to install <a href="https://java.com/nl/download/" target="_blank" rel="noopener">Java Runtime Environment 8</a> and <a href="https://www.microsoft.com/en-us/download/details.aspx?id=42642" target="_blank" rel="noopener">.NET Framework v4.5.2</a> or higher.</p>
+<p>Great! We are now ready to run our first analysis.</p>
+<h1 id="Step-3-Executing-our-first-run"><a href="#Step-3-Executing-our-first-run" class="headerlink" title="Step 3: Executing our first run"></a>Step 3: Executing our first run</h1><p>We need to run 3 commands to execute an analysis.</p>
+<p>Command 1: Prepare for analysis, generate rulesets, hook into msbuild.<br>In this step you will need to use the access token and organization name generated in step 1.<br> You also need to pick a unique project name.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SonarQube.Scanner.MSBuild.exe begin </span><br><span class="line">    /k:&quot;PROJECT_NAME_HERE&quot; </span><br><span class="line">    /d:&quot;sonar.host.url=https://sonarcloud.io&quot; # or replace with on-prem URL</span><br><span class="line">    /d:&quot;sonar.login=ACCESS_TOKEN_HERE&quot; </span><br><span class="line">    /d:&quot;sonar.organization=ORGANIZATION_NAME_HERE&quot;</span><br></pre></td></tr></table></figure></p>
+<p>Command 2: Now it’s time to execute msbuild.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msbuild /t:Rebuild</span><br></pre></td></tr></table></figure></p>
+<p>Command 3: Time to finish up the analysis. (Do not forget to replace the access token placeholder below)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SonarQube.Scanner.MSBuild.exe end /d:&quot;sonar.login=ACCESS_TOKEN_HERE&quot;</span><br></pre></td></tr></table></figure></p>
+<h1 id="Step-4-Taking-a-look-at-the-results"><a href="#Step-4-Taking-a-look-at-the-results" class="headerlink" title="Step 4: Taking a look at the results"></a>Step 4: Taking a look at the results</h1><p>After this first run you can go to <a href="https://sonarcloud.io/dashboard" target="_blank" rel="noopener">your dashboard</a> and you should be able to find a project with the name defined in ‘Command 1’.<br>Because I did not provide any custom rulesets, SonarQube will use a default set.<br>Since the project is just the basic ASP.NET MVC template, the quality gates passed, 0 bugs, vulnerabilities and code smells are found.</p>
+<p><img src="/images/2017/07/23/SonarQubeDashboard-1.png" alt="SonarQubeDashboard-1"></p>
+<h1 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h1><p>It’s pretty easy to get started with SonarQube using SonarCloud.<br>It seems like a very interesting tool to be able to get technical debt and code quality measurable over time.<br>I will definitely take a look at it in more detail.</p>
+
 
                 
             </div>
