@@ -10,6 +10,8 @@
 
     <!--Description-->
     
+        <meta name="description" content="The goal of this post will be to automate our security testing by running a Zed Attack Proxy (ZAP) scan on a regular interval using TeamCity. For an i">
+    
 
     <!--Author-->
     
@@ -179,15 +181,17 @@
                         
 
 
-<a href="/tags/Automation-Zed-attack-proxy-Security-Testing/">#
-- Automation
-- Zed attack proxy
-- Security Testing</a>
+<a href="/tags/Automation/">#Automation</a> <a href="/tags/Zed-attack-proxy/">#Zed attack proxy</a> <a href="/tags/Security-Testing/">#Security Testing</a>
 
 
                     
                 </div>
                 <div class="col-lg-4 col-md-5 post-categories">
+                    
+                        
+
+<a href="/categories/Software-development/">Software development</a>
+
                     
                 </div>
             
@@ -197,7 +201,37 @@
 
             <!-- Post Main Content -->
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                
+                <p>The goal of this post will be to automate our security testing by running a Zed Attack Proxy (ZAP) scan on a regular interval using TeamCity. For an introduction to ZAP, take a look at <a href="https://maartenderaedemaeker.be/getting-started-with-zed-attack-proxy" target="_blank" rel="noopener">my previous post</a>.</p>
+<h1 id="Table-of-contents"><a href="#Table-of-contents" class="headerlink" title="Table of contents"></a>Table of contents</h1><ul>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#commandline">Running ZAP from the commandline</a></li>
+<li><a href="#teamcityconfig">Setting up the TeamCity configuration</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
+</ul>
+<h1 id="Overview"><a href="#Overview" class="headerlink" title=" Overview"></a><a name="overview"></a> Overview</h1><p><img src="/content/images/2017/08/ZapTeamCityOverview.png" alt="ZapTeamCityOverview"></p>
+<p>The plan is to be able to automate our Zed Attack Proxy scans from TeamCity. In this blogpost I’ll use teamcity as example, but the concepts should apply to any other build server as well.</p>
+<p>In this setup we’ll assume a web application is deployed to a seperate environment by another automated proces. In our build configuration we’ll target that web application using Zed Attack Proxy. For the purpose of this example, I deployed an instance of <a href="https://github.com/maartenderaedemaeker/Automated-SecurityTesting-Demo/tree/vulnerabilities-example" target="_blank" rel="noopener">this sample solution</a>.</p>
+<p>The following section will be about <a href="#commandline">running ZAP from the commandline</a>, while <a href="#teamcityconfig">the section after that</a> will explain how to use this knowledge to automate it in our teamcity build.</p>
+<h1 id="Running-ZAP-from-the-commandline"><a href="#Running-ZAP-from-the-commandline" class="headerlink" title=" Running ZAP from the commandline"></a><a name="commandline"></a> Running ZAP from the commandline</h1><p>Right, first of all, we need to be able to run a ZAP scan without using the UI.<br>In our ZAP installation directory (on windows, the default is: C:\Program Files\OWASP\Zed Attack Proxy) we are able to find ‘zap.bat’.</p>
+<p>You’ll notice that, if you try to run it from a working directory different of the installation directory you’ll get an error.</p>
+<p><img src="/content/images/2017/08/ZapCmdErrorWorkingDirectory.png" alt="ZapCmdErrorWorkingDirectory"></p>
+<p>To be able to run the tool, you’ll need to change your working directory to the ZAP installation directory, or if you’re using powershell, you can use the Start-Process commandlet, and pass in the ‘WorkingDirectory’ parameter. Something like this:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Start-Process -WorkingDirectory &quot;C:\Program Files\OWASP\Zed Attack Proxy&quot;</span><br><span class="line">-FilePath &quot;C:\Program Files\OWASP\Zed Attack Proxy\zap.bat&quot;</span><br></pre></td></tr></table></figure>
+<p>When we’ve resolved the working directory issue we want to figure out the possible arguments to the commandline tool.<br>We can pass the <figure class="highlight plain"><figcaption><span>parameter and get a list of available command line arguments.</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">![ZapHelp](/content/images/2017/08/ZapHelp.png)</span><br><span class="line"></span><br><span class="line">We&apos;re able to figure out how to run a scan now.</span><br></pre></td></tr></table></figure></p>
+<p>zap.bat<br>-quickurl “<url where="" our="" application="" is="" hosted="">“<br>-quickout “<path to="" the="" xml="" report="" file="" we="" want="" created=""></path>“<br>-cmd -quickprogress<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">After the command completes (which could take very long, depending on your application size), we should see something like this:</span><br><span class="line"></span><br><span class="line">![ZapScanComplete](/content/images/2017/08/ZapScanComplete.png)</span><br><span class="line"></span><br><span class="line">Jikes, it looks like ZAP found some issues!</span><br><span class="line"></span><br><span class="line">![ReflectedXss](/content/images/2017/08/ReflectedXss.png)</span><br><span class="line">![sql-inject-1](/content/images/2017/08/sql-inject-1.png)</span><br><span class="line"></span><br><span class="line">Let&apos;s hope you were doing a better job at preventing these issues :-). If not, luckily you&apos;ve detected them now.</span><br><span class="line"># &lt;a name=&quot;teamcityconfig&quot;&gt;&lt;/a&gt; Setting up the TeamCity configuration</span><br><span class="line">Ok, time to set up a build configuration.</span><br><span class="line">You&apos;ll see two steps.</span><br><span class="line"></span><br><span class="line">![StepOverview](/content/images/2017/08/StepOverview.png)</span><br><span class="line"></span><br><span class="line">* Step 1: Running Zed Attack Proxy. In these step we&apos;ll use what we&apos;ve learned in the previous step.</span><br><span class="line"></span><br><span class="line">* Step 2: This could be implemented however you&apos;d like. Since we&apos;ve generated a report xml file, we&apos;d probably want to do something with it. Maybe we&apos;d put it on a file share, or perhaps we could parse it and send a mail to the development team if a high level issue has been found.</span><br><span class="line"></span><br><span class="line">Step 1:</span><br><span class="line">* We&apos;ll select the ```command line``` runner type.</span><br><span class="line">* We&apos;ll click &apos;show advanced options&apos; and enter ```%zap.InstallationDirectory%``` in the working directory box, which is a new variable we&apos;ll give a value later on.</span><br><span class="line">* In the &apos;Command executable&apos; box, we&apos;ll enter ```%zap.InstallationDirectory%\zap.bat</span><br></pre></td></tr></table></figure></url></p>
+<ul>
+<li>In the ‘command parameters’ box we’ll enter the following: <code>-quickurl %zap.url% -quickout &quot;%system.teamcity.build.workingDir%\zap-report.xml&quot; -cmd -quickprogress</code></li>
+</ul>
+<p>It should look something like this:</p>
+<p><img src="/content/images/2017/08/Step1.png" alt="Step1"></p>
+<p>What we’ve done in this step is simply executing the command we’ve discussed before, but while using some variables instead of hardcoding everything.</p>
+<p>The <code>system.teamcity.build.workingDir</code> variable is a variable set by TeamCity, as expected, it contains the working directory of our build. </p>
+<p>The <code>zap.InstallationDirectory</code> and <code>zap.url</code> will be defined by us to extract away the parts that might change.</p>
+<p>We can give them a value in the parameter tab.</p>
+<p><img src="/content/images/2017/08/ParameterConfig.png" alt="ParameterConfig"></p>
+<p>Once we’ve verified that the configuration works, we can figure out step 2, where we’ll do something with the report. (up to you)</p>
+<h1 id="Conclusion"><a href="#Conclusion" class="headerlink" title=" Conclusion"></a><a name="conclusion"></a> Conclusion</h1><p>It seems rather easy to get started automating a “quick scan” of Zed attack proxy.<br>It might be also interesting (but much more maintainance / setup effort) to figure out the <a href="https://github.com/zaproxy/zaproxy/wiki/SecRegTests" target="_blank" rel="noopener">“regression testing approach”</a>, but the approach we used here seems to do as a quick starting point.<br>It would be nice to use a tool to get the reports available to all team members, like for example SonarQube. I found a plugin <a href="https://github.com/stevespringett/zap-sonar-plugin" target="_blank" rel="noopener">online</a>, though, for now it seems like the latest major Sonar release introduced some major breaking changes to one of their API’s and the plugin maintainer is waiting for more stability (<a href="https://github.com/stevespringett/zap-sonar-plugin/issues/7" target="_blank" rel="noopener">see this github issue</a>).</p>
+
 
                 
             </div>

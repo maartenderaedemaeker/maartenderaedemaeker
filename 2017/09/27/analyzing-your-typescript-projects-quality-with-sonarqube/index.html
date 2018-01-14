@@ -10,6 +10,13 @@
 
     <!--Description-->
     
+        <meta name="description" content="Table of contents
+Intro
+Installing the plugins
+The SonarQube scanner
+
+ IntroAfter my previous SonarQube blogpost for C# projects, I wanted to figure o">
+    
 
     <!--Author-->
     
@@ -179,15 +186,17 @@
                         
 
 
-<a href="/tags/SonarQube-Code-quality-Typescript/">#
-- SonarQube
-- Code quality
-- Typescript</a>
+<a href="/tags/SonarQube/">#SonarQube</a> <a href="/tags/Code-quality/">#Code quality</a> <a href="/tags/Typescript/">#Typescript</a>
 
 
                     
                 </div>
                 <div class="col-lg-4 col-md-5 post-categories">
+                    
+                        
+
+<a href="/categories/Software-development/">Software development</a>
+
                     
                 </div>
             
@@ -197,7 +206,24 @@
 
             <!-- Post Main Content -->
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                
+                <h1 id="Table-of-contents"><a href="#Table-of-contents" class="headerlink" title="Table of contents"></a>Table of contents</h1><ul>
+<li><a href="#intro">Intro</a></li>
+<li><a href="#plugins">Installing the plugins</a></li>
+<li><a href="#scanner">The SonarQube scanner</a></li>
+</ul>
+<h1 id="Intro"><a href="#Intro" class="headerlink" title=" Intro"></a><a name="intro"></a> Intro</h1><p>After my previous SonarQube blogpost for C# projects, I wanted to figure out if SonarQube could work for a Typescript application. Turns out, it does!</p>
+<h1 id="Installing-the-plugins"><a href="#Installing-the-plugins" class="headerlink" title="Installing the plugins"></a><a name="plugins"></a>Installing the plugins</h1><p>To be able to scan our Typescript project with Sass styling, we need to install the following plugins: </p>
+<ul>
+<li>SonarTS (for the typescript support). This plugin will run tslint on your project.</li>
+<li>SCSS, LESS, CSS plugin (for our styling). This plugin will scan our styling files. It can find issues such as non standard attribute values, non-conventional names, unknown pseudo-selectors and empty rules.</li>
+<li>Web plugin (for our Html): this plugin finds issues such as: accessibility issues (for example using em tags instead of i tags), missing end tags, missing required attributes, …</li>
+</ul>
+<p>You can install them by navigating to “Administration &gt; System &gt; Update Center &gt; Available”.</p>
+<h1 id="The-SonarQube-scanner"><a href="#The-SonarQube-scanner" class="headerlink" title="The SonarQube scanner"></a><a name="scanner"></a>The SonarQube scanner</h1><p>You can download the SonarQube scanner <a href="https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner" target="_blank" rel="noopener">here</a>. (caution: this is not the same scanner as the SonarQube msbuild scanner from the previous posts)</p>
+<p>We can scan our Typescript project like this:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sonar-scanner -D &quot;sonar.projectKey=&lt;projectname&gt;&quot; </span><br><span class="line">-D &quot;sonar.host.url=&lt;sonar instance url&gt;&quot; -D &quot;sonar.host.port=&lt;sonar instance port&gt;&quot; </span><br><span class="line">-D &quot;sonar.user=&lt;sonar user&gt;&quot; </span><br><span class="line">-D &quot;sonar.login=&lt;sonar password / token &gt;&quot; </span><br><span class="line">-D &quot;sonar.sources=&lt;root directory of your source, relative to working directory&gt;&quot;</span><br><span class="line">-D &quot;sonar.projectVersion=&lt;optional but handy to track progress over versions&gt;&quot;</span><br></pre></td></tr></table></figure></p>
+<p>As we can see, our project shows up in the dashboard.</p>
+<p><img src="/content/images/2017/09/SonarTs_1.png" alt="SonarTs_1"></p>
+
 
                 
             </div>

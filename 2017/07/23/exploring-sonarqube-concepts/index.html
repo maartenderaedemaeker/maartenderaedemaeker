@@ -10,6 +10,8 @@
 
     <!--Description-->
     
+        <meta name="description" content="The goal of this post is to dive into SonarQube concepts using a practical approach.We’ll start from the following source code, after this tutorial we">
+    
 
     <!--Author-->
     
@@ -179,14 +181,17 @@
                         
 
 
-<a href="/tags/SonarQube-Software-Quality/">#
-- SonarQube
-- Software Quality</a>
+<a href="/tags/SonarQube/">#SonarQube</a> <a href="/tags/Software-Quality/">#Software Quality</a>
 
 
                     
                 </div>
                 <div class="col-lg-4 col-md-5 post-categories">
+                    
+                        
+
+<a href="/categories/Software-development/">Software development</a>
+
                     
                 </div>
             
@@ -196,7 +201,52 @@
 
             <!-- Post Main Content -->
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                
+                <p>The goal of this post is to dive into SonarQube concepts using a practical approach.<br>We’ll start from <a href="https://github.com/maartenderaedemaeker/Automated-SecurityTesting-Demo/tree/part1" target="_blank" rel="noopener">the following source code</a>, after this tutorial we’ll end up at <a href="https://github.com/maartenderaedemaeker/Automated-SecurityTesting-Demo/tree/part2" target="_blank" rel="noopener">this stage</a>.</p>
+<h1 id="Table-of-contents"><a href="#Table-of-contents" class="headerlink" title="Table of contents"></a>Table of contents</h1><ul>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#quality-profiles">Quality profiles</a></li>
+<li><a href="#rules">Rules</a></li>
+<li><a href="#metrics">Metrics</a></li>
+<li><a href="#measures">Measures</a></li>
+<li><a href="#issues">Issues</a></li>
+<li><a href="#snapshots">Snapshots</a></li>
+<li><a href="#quality-gates">Quality gates</a></li>
+</ul>
+<h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a><a name="overview"></a>Overview</h1><p>As a guide for exploring the SonarQube concepts, I’ve added an overview image below.</p>
+<p><img src="/content/images/2017/07/Overview.png" alt="Overview"></p>
+<h1 id="Quality-profiles"><a href="#Quality-profiles" class="headerlink" title="Quality profiles"></a><a name="quality-profiles"></a>Quality profiles</h1><p>A quality profile contains a set of <a href="#rules">rules</a> used to generate <a href="#issues">issues</a> for a <a href="#snapshots">snaphot</a> when a new analysis is submitted to the server.</p>
+<p>By default, one quality profile “Sonar way” is provided for each language we use.<br>It is recommended to copy the profile for our project and tweak it to our needs.<br>To do this, we need to visit the dashboard and navigate to each of the quality profiles.</p>
+<p><img src="/content/images/2017/07/quality-profiles-1.png" alt="quality-profiles-1"><br><img src="/content/images/2017/07/quality-profiles-2.png" alt="quality-profiles-2"></p>
+<p>After choosing a new name for our quality profile, we need to assign it to be used in our project.</p>
+<p><img src="/content/images/2017/07/quality-profiles-3.png" alt="quality-profiles-3"><br><img src="/content/images/2017/07/quality-profiles-4.png" alt="quality-profiles-4"></p>
+<p>You’ll notice that the quality profiles will still show as “Sonar way”. When we run the analyzer again, it gets updated.</p>
+<p><img src="/content/images/2017/07/quality-profiles-5.png" alt="quality-profiles-5"></p>
+<p>After copying all of  the profiles, we’ll take a look at how <a href="#rules">rules</a> are used in the profile.</p>
+<h1 id="Rules"><a href="#Rules" class="headerlink" title="Rules"></a><a name="rules"></a>Rules</h1><p>The goal of rules is to detect issues.<br>There are a nice set of predefined sets,  you’re also able to create steps with custom rules using templates or even write your own Roslyn analyzer.<br>Let’s take a look at a predefined example.</p>
+<p><img src="/content/images/2017/07/rules-1.png" alt="rules-1"><br><img src="/content/images/2017/07/rules-2.png" alt="rules-2"></p>
+<p>This rule is enabled by default in the “vulnerabilities” section. It does not allow public static fields which are mutable.</p>
+<p>To demonstrate SonarQube rules, I’ve added a file to my project with several issues in it. You can take <a href="https://github.com/maartenderaedemaeker/Automated-SecurityTesting-Demo/blob/part2/SecurityTestingDemo/Demo/Demo1.cs" target="_blank" rel="noopener">a look here</a>.</p>
+<p>As you can see in the image below, my project is not scoring well at all. SonarQube has detected a bunch of issues.</p>
+<p><a name="rules3"></a><br><img src="/content/images/2017/07/rules-3.png" alt="rules-3"></p>
+<p>I can navigate to the file I’ve added and zoom in on the specific issues by going to the code tab and navigating through my code structure.<br><img src="/content/images/2017/07/rules-4.png" alt="rules-4"></p>
+<p>SonarQube also makes a list of issues with an estimated “time needed to fix”, which is summed to the total number as show in <a href="#rules3">this image</a> .<br><img src="/content/images/2017/07/rules-5.png" alt="rules-5"></p>
+<h1 id="Metrics"><a href="#Metrics" class="headerlink" title="Metrics"></a><a name="metrics"></a>Metrics</h1><p>A metric is something that can be <a href="#measures">measured</a>.<br>As the <a href="web_api/api/metrics/search">documentation</a> points out, they can either by a qualitative or quantitative metric.<br>Quantitative metrics, like for example number of line of counts do not give quality indications.<br><img src="/content/images/2017/07/metrics-1.png" alt="metrics-1"><br>Qualitative metrics, on the other hand, do say something about quality. Their <a href="#measures">measures</a> impact scores such as reliability, security and maintainability.<br><img src="/content/images/2017/07/metrics-2.png" alt="metrics-2"></p>
+<h1 id="Measures"><a href="#Measures" class="headerlink" title="Measures"></a><a name="measures"></a>Measures</h1><p>Measures are values for specific <a href="#metrics">metrics</a>. They can vary over time, and contained within a <a href="#snapshots">snapshot</a>.</p>
+<h1 id="Issues"><a href="#Issues" class="headerlink" title="Issues"></a><a name="issues"></a>Issues</h1><p>If a violation on a <a href="#rules">rule</a> is found, issues are added to the <a href="#snapshots">snapshot</a>.</p>
+<p>3 kinds of issues exist:</p>
+<ul>
+<li><p><em>Bugs</em> could be potential points of failure in your code.<br>For example:<br><img src="/content/images/2017/07/issues-1.png" alt="issues-1"><br>Also note the nice way of documenting the rule, complete with instructive examples.<br><img src="/content/images/2017/07/issues-2.png" alt="issues-2"></p>
+</li>
+<li><p><em>Code smells</em> are issues that have maintainability impact.<br>For example:<br><img src="/content/images/2017/07/issues-3.png" alt="issues-3"></p>
+</li>
+<li><p><em>Vulnerabilities</em> are security related issues.<br>For example<br><img src="/content/images/2017/07/issues-4.png" alt="issues-4"></p>
+</li>
+</ul>
+<h1 id="Snapshots"><a href="#Snapshots" class="headerlink" title="Snapshots"></a><a name="snapshots"></a>Snapshots</h1><p>A snapshot is generated when we execute and submit a scan.<br>They have a set of <a href="#measures">measures</a> containing values for <a href="#metrics">metrics</a> and a list of <a href="#issues">issues</a> generated by <a href="#rules">rules</a>;</p>
+<h1 id="Quality-gates"><a href="#Quality-gates" class="headerlink" title=" Quality gates"></a><a name="quality-gates"></a> Quality gates</h1><p>A quality gate is a group of requirements that needs to be met to achieve “enough” quality for a given <a href="#snapshots">snapshot</a> to be release-ready.<br>By default SonarQube provides one.</p>
+<p><img src="/content/images/2017/07/quality-profiles-1-1.png" alt="quality-profiles-1-1"><br><img src="/content/images/2017/07/quality-profiles-2-1.png" alt="quality-profiles-2-1"></p>
+<h1 id="For-more-information-take-a-look-at-the-SonarQube-documentation"><a href="#For-more-information-take-a-look-at-the-SonarQube-documentation" class="headerlink" title="For more information: take a look at the SonarQube documentation"></a>For more information: take a look at the SonarQube documentation</h1><p><a href="https://docs.sonarqube.org/display/SONAR/Concepts" target="_blank" rel="noopener">SonarQube documentation: concepts</a></p>
+
 
                 
             </div>

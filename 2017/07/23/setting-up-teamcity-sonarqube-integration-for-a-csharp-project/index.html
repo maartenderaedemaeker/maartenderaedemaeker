@@ -10,6 +10,8 @@
 
     <!--Description-->
     
+        <meta name="description" content="This blog post follows my previous post “Getting started with SonarQube on a C# project”.In my first attempt of integrating TeamCity and SonarQube I t">
+    
 
     <!--Author-->
     
@@ -179,16 +181,17 @@
                         
 
 
-<a href="/tags/Automation-SonarQube-Code-quality-Teamcity/">#
-- Automation
-- SonarQube
-- Code quality
-- Teamcity</a>
+<a href="/tags/SonarQube/">#SonarQube</a> <a href="/tags/Code-quality/">#Code quality</a> <a href="/tags/Automation/">#Automation</a> <a href="/tags/Teamcity/">#Teamcity</a>
 
 
                     
                 </div>
                 <div class="col-lg-4 col-md-5 post-categories">
+                    
+                        
+
+<a href="/categories/Software-development/">Software development</a>
+
                     
                 </div>
             
@@ -198,7 +201,31 @@
 
             <!-- Post Main Content -->
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                
+                <p>This blog post follows my previous post <a href="/2017/07/22/Setting-up-TeamCity-SonarQube-integration-for-a-Csharp-project/">“Getting started with SonarQube on a C# project”</a>.<br>In my first attempt of integrating TeamCity and SonarQube I tried to use <a href="https://confluence.jetbrains.com/display/TW/SonarQube+Integration" target="_blank" rel="noopener">TeamCity SonarQube plugin</a>, but it seems to be abandoned as the specific documentation for the runner this plugin relies on doesn’t seem to exist anymore <a href="http://docs.codehaus.org/display/SONAR/Analysis+Parameters" target="_blank" rel="noopener">runner documentation</a>.<br>That’s why this post will just use the command-line tools available, with the added bonus advantage of easier portability over different types of build servers.<br>You can check out the source code analyzed at <a href="https://github.com/maartenderaedemaeker/Automated-SecurityTesting-Demo/tree/part1" target="_blank" rel="noopener">github</a>.</p>
+<h1 id="Table-of-contents"><a href="#Table-of-contents" class="headerlink" title="Table of contents"></a>Table of contents</h1><ul>
+<li>Step 1: Installing the tools</li>
+<li>Step 2: Setting up a build configuration for SonarQube analysis</li>
+</ul>
+<h1 id="Step-1-Installing-the-tools"><a href="#Step-1-Installing-the-tools" class="headerlink" title="Step 1: Installing the tools"></a>Step 1: Installing the tools</h1><p>We’re going to install some dependencies on the build agent.<br>First off, <a href="https://chocolatey.org/install" target="_blank" rel="noopener">install chocolatey</a>.<br>After that, install SonarQube runner.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">choco install -y microsoft-build-tools msbuild-sonarqube-runner</span><br></pre></td></tr></table></figure></p>
+<h1 id="Step-2-Setting-up-a-build-configuration"><a href="#Step-2-Setting-up-a-build-configuration" class="headerlink" title="Step 2: Setting up a build configuration"></a>Step 2: Setting up a build configuration</h1><p>Since this is a new project in TeamCity, I’ll start with creating a project.</p>
+<p><img src="/content/images/2017/07/Teamcity-SonarQube-3.png" alt="Teamcity-SonarQube-3"></p>
+<p>After clicking through the wizard, TeamCity discovered one build step for my project.<br>I’d like to start with a clean slate and click on configure build steps manually.</p>
+<p><img src="/content/images/2017/07/Teamcity-SonarQube-4.png" alt="Teamcity-SonarQube-4"></p>
+<p>We’re going to create 4 build steps.<br><img src="/content/images/2017/07/Teamcity-SonarQube-5.png" alt="Teamcity-SonarQube-5"></p>
+<ul>
+<li>Step 1:<br>  Runner type: “NuGet Installer”<br>  This step will restore the NuGet packages required for building the solution.</li>
+<li><p>Step 2:<br>  Runner type: “Command Line”</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SonarQube.Scanner.MSBuild.exe begin /k:&quot;%sonar.project%&quot; </span><br><span class="line">    /d:&quot;sonar.host.url=%sonar.host.url%&quot; /d:&quot;sonar.login=%sonar.login%&quot; </span><br><span class="line">    /d:&quot;sonar.organization=%sonar.organization%&quot; /v:&quot;%build.number%&quot;</span><br></pre></td></tr></table></figure>
+<p>  This step is used to hook in the SonarQube runner into the msbuild process.<br>  You’ll notice the parameters enclosed with %’s. More on that later.</p>
+</li>
+<li>Step 3:<br>  Runner type: “MSBuild”<br>  This step will build the solution.</li>
+<li>Step 4:<br>  Runner type: “Command line”<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SonarQube.Scanner.MSBuild.exe end /d:&quot;sonar.login=%sonar.login%&quot;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>This step will submit the analysis to SonarQube.</p>
+<p>After defining these steps we’ll also need to define the parameters used in the commands.<br>Using these allows us to only need to change their value in one place. If you want, you could set this parameters globally at your root project, or for all your builds on this specific project.<br><img src="/content/images/2017/07/Teamcity-SonarQube-6.png" alt="Teamcity-SonarQube-6"></p>
+<h1 id="Step-3-Test-the-configuration"><a href="#Step-3-Test-the-configuration" class="headerlink" title="Step 3: Test the configuration"></a>Step 3: Test the configuration</h1><p>There we go, now you can press the run build button to see if it works! :-)<br>If all went well you should now have a basic working build configuration.<br>Now you can start tweaking the configuration to fit your needs. Good luck!</p>
+
 
                 
             </div>

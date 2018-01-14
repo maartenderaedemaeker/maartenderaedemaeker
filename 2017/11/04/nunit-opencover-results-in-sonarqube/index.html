@@ -10,6 +10,8 @@
 
     <!--Description-->
     
+        <meta name="description" content="In this blogpost I’ll explain how to add your NUnit code coverage to your project analysis results, by using OpenCover.You can find a sample project y">
+    
 
     <!--Author-->
     
@@ -179,17 +181,17 @@
                         
 
 
-<a href="/tags/SonarQube-Code-quality-C-NET-Testing/">#
-- SonarQube
-- Code quality
-- C#
-- .NET
-- Testing</a>
+<a href="/tags/NET/">#.NET</a> <a href="/tags/C/">#C#</a> <a href="/tags/SonarQube/">#SonarQube</a> <a href="/tags/Code-quality/">#Code quality</a> <a href="/tags/Testing/">#Testing</a>
 
 
                     
                 </div>
                 <div class="col-lg-4 col-md-5 post-categories">
+                    
+                        
+
+<a href="/categories/Software-development/">Software development</a>
+
                     
                 </div>
             
@@ -199,7 +201,53 @@
 
             <!-- Post Main Content -->
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                
+                <p>In this blogpost I’ll explain how to add your NUnit code coverage to your project analysis results, by using OpenCover.<br>You can find a sample project you can use to try it out yourself <a href="https://github.com/maartenderaedemaeker/SonarQubeNunitIntegrationDemo" target="_blank" rel="noopener">on my github</a>.</p>
+<ul>
+<li><a href="#sonarqube-intro">What is SonarQube</a></li>
+<li><a href="#opencover-intro">What is OpenCover</a></li>
+<li><a href="#using-opencover">Using OpenCover</a></li>
+<li><a href="#coverage-results">Adding test coverage results to SonarQube</a><br><a name="sonarqube-intro"></a><h1 id="What-is-SonarQube"><a href="#What-is-SonarQube" class="headerlink" title="What is SonarQube"></a>What is SonarQube</h1>In short, SonarQube is a tool for monitoring your code quality, mainly using static analysis.<br>For more information, take a look at <a href="/tag/sonarqube/">my other posts about SonarQube</a> and the <a href="https://docs.sonarqube.org/display/SONAR/Documentation" target="_blank" rel="noopener">SonarQube documentation</a>.<br><a name="opencover-intro"></a><h1 id="What-is-OpenCover"><a href="#What-is-OpenCover" class="headerlink" title="What is OpenCover"></a>What is OpenCover</h1>OpenCover is a code coverage tool.<br>It allows us to run an application using the tool, and it will monitor what parts of the code are executed during the execution.<br>We can use it to run our unit test framework, and it will tell us how much of our code is covered by our tests.</li>
+</ul>
+<p>In this blogpost, I’ll be using NUnit as my unit testing framework.<br><a name="using-opencover"></a></p>
+<h1 id="Using-OpenCover"><a href="#Using-OpenCover" class="headerlink" title="Using OpenCover"></a>Using OpenCover</h1><p>In my solution, I’ve added the OpenCover and NUnit.ConsoleRunner nuget packages.<br>If I take a look in my packages folder, I can find the corresponding packages.</p>
+<p><img src="/content/images/2017/11/2017-11-05-09_13_58-packages.png" alt="2017-11-05-09_13_58-packages"></p>
+<p>We are interested in the following two executables included in these packages:</p>
+<ul>
+<li><code>{OpenCoverFolder}\tools\OpenCover.Console.exe</code></li>
+<li><code>{NUnitConsoleFolder}\tools\nunit3-console.exe</code></li>
+</ul>
+<p>As I explained earlier, we’re going to use OpenCover to run the NUnit console runner to measure our code coverage.</p>
+<p>We can do it by executing the following command: (replace the variables with the real values)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;PATH_TO_OpenCover.Console.exe&#125; &quot;-target:&#123;PATH_TO_nunit3-console.exe&#125;&quot; </span><br><span class="line">&quot;-targetargs:&#123;PATH_TO_OUR_TEST_ASSEMBLIES&#125;&quot; </span><br><span class="line">&quot;-register:user&quot; &quot;-output:opencover.xml&quot;</span><br></pre></td></tr></table></figure></p>
+<p>Let’s take a closer look at the command:</p>
+<ul>
+<li>We run the <code>OpenCover.Console.exe</code> executable</li>
+<li>We are telling it to use the nunit3-console.exe as it’s target using the <code>-target</code> parameter. </li>
+<li>We use the <code>-targetargs</code> parameter to pass through arguments to nunit3-console.exe. (for example in my case, I would pass through <code>-targetargs:.\Demo.Tests\bin\Debug\Demo.Tests.dll</code>, this would tell NUnit to run all tests in this assembly. </li>
+<li>We use the <code>-register:user</code> argument to tell OpenCover to register the agent process it uses for the current user. (otherwise you’ll get an empty code coverage result)</li>
+<li>We specify the <code>-output</code> parameter to choose a file where the OpenCover results get written to.</li>
+</ul>
+<p>When running the command, we can see NUnit running the test and the code coverage results being written.</p>
+<p><img src="/content/images/2017/11/2017-11-05-09_31_16-Cmder.png" alt="2017-11-05-09_31_16-Cmder"></p>
+<p><a name="coverage-results"></a></p>
+<h1 id="Adding-test-coverage-results-to-SonarQube"><a href="#Adding-test-coverage-results-to-SonarQube" class="headerlink" title="Adding test coverage results to SonarQube"></a>Adding test coverage results to SonarQube</h1><p>If you need a refresher on how to use the SonarQube scanner for msbuild, take a look at <a href="/2017/07/16/getting-started-with-sonarqube-on-a-csharp-project/">my previous post about getting started with SonarQube on a C# project</a>.</p>
+<p>The general steps we need to take when running a SonarQube scan on a .NET project are the following:</p>
+<ol>
+<li>Setup the SonarQube scanner for msbuild - using the <code>begin</code> argument (retrieve rules from SonarQube instance, inject analyzers in build pipeline)</li>
+<li>Run msbuild</li>
+<li>Use the SonarQube scanner for msbuild to generate and submit the report - using the <code>end</code> argument</li>
+</ol>
+<p>This would give us the following corresponding commands (replace the variables with your parameters):</p>
+<ol>
+<li><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">SonarQube.Scanner.MSBuild.exe begin </span><br><span class="line">/k:&#123;desired_project_name&#125; </span><br><span class="line">/d:&apos;sonar.host.url=&#123;sonarqube_url&#125;&apos; </span><br><span class="line">/d:&apos;sonar.host.port=&#123;sonarqube_port&#125;&apos; </span><br><span class="line">/d:&apos;sonar.user=&#123;sonarqube_user&#125;&apos; </span><br><span class="line">/d:&apos;sonar.login=&#123;sonarqube_logintoken&#125;&apos;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>2.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msbuild.exe /t:Rebuild &#123;solution_name&#125;.sln</span><br></pre></td></tr></table></figure></p>
+<p>3.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SonarQube.Scanner.MSBuild.exe end /d:&apos;sonar.login=&apos;&#123;sonarqube_logintoken&#125;&apos;</span><br></pre></td></tr></table></figure></p>
+<p>Now we know how to generate a code coverage result file, we can make SonarQube aware of where to pick up the results.</p>
+<p>We can do this by modifying step 1 and specifying the <code>sonar.cs.opencover.reportsPaths</code> property in our SonarQube scanner command like this:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/d:&apos;sonar.cs.opencover.reportsPaths=opencover.xml&apos;</span><br></pre></td></tr></table></figure></p>
+<p>SonarQube will pick up our code coverage and show it in our projects dashboard:</p>
+<p><img src="/content/images/2017/11/2017-11-05-11_09_47-SonarQubeNUnitIntegrationDemo.png" alt="2017-11-05-11_09_47-SonarQubeNUnitIntegrationDemo"></p>
+
 
                 
             </div>

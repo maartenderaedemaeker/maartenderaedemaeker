@@ -10,6 +10,8 @@
 
     <!--Description-->
     
+        <meta name="description" content="Today’s blogpost will be about how you can improve your web application’s performance by adding caching using HTTP headers.These headers allow us to l">
+    
 
     <!--Author-->
     
@@ -197,7 +199,53 @@
 
             <!-- Post Main Content -->
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                
+                <p>Today’s blogpost will be about how you can improve your web application’s performance by adding caching using HTTP headers.<br>These headers allow us to limit the number of requests clients have to make, reducing load and improving client speed.</p>
+<h1 id="Cache-control"><a href="#Cache-control" class="headerlink" title="Cache-control"></a>Cache-control</h1><p>The main header we’ll be discussing is the cache-control header. This header is <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control#Browser_compatibility" target="_blank" rel="noopener">well supported</a>. It allows us to instruct how proxies and the end user’s browser should handle a resource, cache-wise.<br>Since there are a few bugs around with “immutable”, “stale-while-revalidate” and “stale-if-error”, I’ll focus on the more basic options.</p>
+<ul>
+<li>The first thing to discuss is <strong>cacheability</strong><ul>
+<li><em>Public</em>: response can be cached by any cache</li>
+<li><em>Private</em>: response should not be cached by a shared cache, only by end user.</li>
+<li><em>No-Cache</em>: can be cached, but each request has to be <a href="#revalidation">revalidated</a>. This means that a shared cache can still hold on to a resource, but checks with the server before returning the cached content.</li>
+<li><em>No-Store</em>: disables caching.</li>
+</ul>
+</li>
+<li>The second part is about <strong>expiration</strong>.<br>Important options here are:<ul>
+<li><em>max-age=[numberofseconds]</em>: this option defines how long both local and shared cached can cache a response.</li>
+<li><em>s-max-age=[numberofseconds]</em>: this option does the same as max-age, but excludes private (local) caches, so it only works for shared caches.</li>
+</ul>
+</li>
+</ul>
+<p>Combined these could form the following headers:</p>
+<p><strong>Example 1</strong>: local / private caching for one hour, not on shared proxy.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Cache-Control: max-age=3600 private</span><br></pre></td></tr></table></figure>
+<p><strong>Example 2</strong>: can be cached both locally and on shared proxies for 24 hours.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Cache-Control: max-age=86400 public</span><br></pre></td></tr></table></figure></p>
+<h1 id="Vary"><a href="#Vary" class="headerlink" title="Vary"></a>Vary</h1><p>Allows deciding if a response needs to be cached based on if a set of request headers differ.<br>You could use it to make sure content-negotiated content is cached correctly. For example, an XML response is already cached, you want to make sure to get another response when you ask for JSON by letting the caching vary on the “Accept-Encoding” headers.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Vary: Accept-Encoding</span><br></pre></td></tr></table></figure></p>
+<h1 id="Validation"><a href="#Validation" class="headerlink" title="Validation"></a>Validation</h1><p>There are two main ways of validating if a resource has changed.</p>
+<h2 id="Strong-validation-ETags"><a href="#Strong-validation-ETags" class="headerlink" title="Strong validation: ETags"></a>Strong validation: ETags</h2><p>If the browser sends back an ETag header with a specific value, the client can later pass on the ETag in a following request to check if the content has changed. </p>
+<p>For example:</p>
+<p><strong>Client</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET /someResource</span><br></pre></td></tr></table></figure></p>
+<p><strong>Server</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">200 OK</span><br><span class="line">ETag: &quot;abcdef&quot;</span><br><span class="line"></span><br><span class="line">// SOME CONTENT</span><br></pre></td></tr></table></figure></p>
+<p><strong>Client</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GET /someResource</span><br><span class="line">If-None-Match: &quot;abcdef&quot;</span><br></pre></td></tr></table></figure></p>
+<p><strong>Server</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">304 Not Modified</span><br></pre></td></tr></table></figure></p>
+<h2 id="Weak-validation-Last-Modified"><a href="#Weak-validation-Last-Modified" class="headerlink" title="Weak validation: Last-Modified"></a>Weak validation: Last-Modified</h2><p>This is a similar principle, though it depends on a date instead of a unique value.</p>
+<p><strong>Server</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Last-Modified Sun, 05 Feb 2017 10:34:56 UTC</span><br></pre></td></tr></table></figure></p>
+<p><strong>Client</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">If-Not-Modified-Since: Sun, 05 Feb 2017 10:34:56 UTC</span><br></pre></td></tr></table></figure></p>
+<p><strong>Server</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">304 Not Modified</span><br></pre></td></tr></table></figure></p>
+<h1 id="Revalidation"><a href="#Revalidation" class="headerlink" title="Revalidation "></a>Revalidation <a name="revalidation"></a></h1><ul>
+<li><em>immutable</em>: this tells the agent requesting the content that this resource will never change. The browser would be allowed to keep the resource, even after a hard refresh.</li>
+<li><em>must-revalidate</em>: this forces the client to check if the content has changed each time using the If-Modified-Since or If-None-Match mechanisms.</li>
+<li><em>proxy-revalidate</em>: this forces the proxy to check if the content has changed each time using the If-Modified-Since or If-None-Match mechanisms.<h1 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h1>These headers give you some tools to get some nice performance gains for your web application using HTTP caching. Combined with a reverse proxy service such as <a href="https://www.cloudflare.com/" target="_blank" rel="noopener">Cloudflare</a>, these can take a great load of your servers.</li>
+</ul>
+<h2 id="Sources-amp-further-reading"><a href="#Sources-amp-further-reading" class="headerlink" title="Sources &amp; further reading"></a>Sources &amp; further reading</h2><ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching" target="_blank" rel="noopener">https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching</a></li>
+<li><a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching" target="_blank" rel="noopener">https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching</a></li>
+<li><a href="https://blog.fortrabbit.com/mastering-http-caching" target="_blank" rel="noopener">https://blog.fortrabbit.com/mastering-http-caching</a></li>
+<li><a href="https://devcenter.heroku.com/articles/increasing-application-performance-with-http-cache-headers" target="_blank" rel="noopener">https://devcenter.heroku.com/articles/increasing-application-performance-with-http-cache-headers</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control" target="_blank" rel="noopener">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control</a></li>
+<li><a href="https://www.mnot.net/cache_docs/" target="_blank" rel="noopener">https://www.mnot.net/cache_docs/</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Vary" target="_blank" rel="noopener">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Vary</a></li>
+</ul>
+
 
                 
             </div>
