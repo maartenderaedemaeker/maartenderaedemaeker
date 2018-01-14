@@ -74,7 +74,7 @@ So, what does that mean? Let's look back to the previous sample.
 ---
 ### Cross cutting concerns: example
 
-![Cross cutting concerns example](/images/2017/07/crosscuttingconcerns.png)
+![Cross cutting concerns example](/images/2017/07/23/crosscuttingconcerns.png)
 
 ---
 ### Aspect Oriented Programming
@@ -93,7 +93,7 @@ Turns out, there are multiple ways of doing this.
 This brings us back to a quick refresher of the proxy pattern, applied to the example.
 The real *Something* class and the *DoSomething* method will not be invoked directly. Instead, another class will do some logic, then (optionally) delegate to the real implementation.Since they both implement the same interface, and the client is calling the object using the interface, the client does not have to know that it is talking to a proxy instead to the original class.
 
-![Proxy pattern](/images/2017/07/proxy-pattern.png)
+![Proxy pattern](/images/2017/07/23/proxy-pattern.png)
 
 So, this is all splendid, but we don't really want to manually create a proxy class for each type we want to intercept right?
 
@@ -115,7 +115,7 @@ The interface has one method: intercept, with one argument of the type IInvocati
 That object contains information about the invocation that is currently intercepted.
 By calling the Proceed method, the wrapped invocation is called.
 
-![Interceptor example](/images/2017/07/interceptor-example.png)
+![Interceptor example](/images/2017/07/23/interceptor-example.png)
 ---
 ### AutoFac: using interceptors
 To be able to use interceptors in AutoFac, you need to install the *Autofac.Extras.DynamicProxy* package (for more information: [take a look at the AutoFac docs](http://docs.autofac.org/en/latest/advanced/interceptors.html).
@@ -142,16 +142,16 @@ builder
 So when we look at the changes to our code, we can clearly see the difference.
 Before adding the interceptors our code looked like:
 
-![Cross cutting concerns example](/images/2017/07/crosscuttingconcerns.png)
+![Cross cutting concerns example](/images/2017/07/23/crosscuttingconcerns.png)
 
 When we use interceptors it would look something like this:
 
-![Cross cutting concerns example with interceptors](/images/2017/07/crosscuttingconcerns-intercepted.png)
+![Cross cutting concerns example with interceptors](/images/2017/07/23/crosscuttingconcerns-intercepted.png)
 
 So what happens if we chain these interceptors?
 Take a look at the image below:
 
-![Cross cutting concerns interceptor flow](/images/2017/07/InterceptorDiagram.png)
+![Cross cutting concerns interceptor flow](/images/2017/07/23/InterceptorDiagram.png)
 
 Using interceptors does have a (minor) downside.
 It becomes a little bit harder to reason about your code, because of the increased complexity. (You do not see all you code at the same spot).
