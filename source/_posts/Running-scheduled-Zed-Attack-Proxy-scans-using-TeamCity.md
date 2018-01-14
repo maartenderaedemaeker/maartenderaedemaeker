@@ -10,6 +10,7 @@ permalink: automating-zed-attack-proxy-on-your-build-server
 id: 59d3e06faf4f1298d16e0ec7
 updated: '2017-09-10 21:00:22'
 date: 2017-08-10 18:04:28
+author: Maarten De Raedemaeker
 ---
 The goal of this post will be to automate our security testing by running a Zed Attack Proxy (ZAP) scan on a regular interval using TeamCity. For an introduction to ZAP, take a look at [my previous post](/2017/08/10/getting-started-with-zed-attack-proxy/).
 

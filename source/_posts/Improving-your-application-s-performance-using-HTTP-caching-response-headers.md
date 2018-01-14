@@ -9,6 +9,7 @@ permalink: http-caching
 id: 59e9fd0baa906d22b026178f
 updated: '2017-10-23 11:01:46'
 date: 2017-10-20 15:41:31
+author: Maarten De Raedemaeker
 ---
 Today's blogpost will be about how you can improve your web application's performance by adding caching using HTTP headers.
 These headers allow us to limit the number of requests clients have to make, reducing load and improving client speed.

@@ -12,6 +12,7 @@ permalink: nunit-opencover-results-in-sonarqube
 id: 59fd93b687a49eb687f6fce6
 updated: '2017-11-06 07:32:28'
 date: 2017-11-04 11:17:26
+author: Maarten De Raedemaeker
 ---
 In this blogpost I'll explain how to add your NUnit code coverage to your project analysis results, by using OpenCover.
 You can find a sample project you can use to try it out yourself [on my github](https://github.com/maartenderaedemaeker/SonarQubeNunitIntegrationDemo).

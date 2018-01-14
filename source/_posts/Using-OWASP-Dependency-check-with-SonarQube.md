@@ -11,6 +11,7 @@ permalink: using-owasp-dependency-check
 id: 59d3e06faf4f1298d16e0ec4
 updated: '2017-08-13 22:40:10'
 date: 2017-07-27 20:41:42
+author: Maarten De Raedemaeker
 ---
 # Intro
 In this post I will discuss how to use OWASP Dependency check to help mitigate the security risk of using component with known vulnerabilities.

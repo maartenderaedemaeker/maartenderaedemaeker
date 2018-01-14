@@ -12,6 +12,7 @@ permalink: setting-up-teamcity-sonarqube-integration-for-a-csharp-project
 id: 59d3e06faf4f1298d16e0ec2
 updated: '2017-08-26 19:31:51'
 date: 2017-07-23 14:55:06
+author: Maarten De Raedemaeker
 ---
 This blog post follows my previous post ["Getting started with SonarQube on a C# project"](/2017/07/23/getting-started-with-sonarqube-on-a-csharp-project/).
 In my first attempt of integrating TeamCity and SonarQube I tried to use [TeamCity SonarQube plugin](https://confluence.jetbrains.com/display/TW/SonarQube+Integration), but it seems to be abandoned as the specific documentation for the runner this plugin relies on doesn't seem to exist anymore [runner documentation](http://docs.codehaus.org/display/SONAR/Analysis+Parameters).

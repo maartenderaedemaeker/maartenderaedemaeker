@@ -9,6 +9,7 @@ permalink: exploring-sonarqube-concepts
 id: 59d3e06faf4f1298d16e0ec3
 updated: '2017-08-01 21:26:46'
 date: 2017-07-23 16:26:05
+author: Maarten De Raedemaeker
 ---
 The goal of this post is to dive into SonarQube concepts using a practical approach.
 We'll start from [the following source code](https://github.com/maartenderaedemaeker/Automated-SecurityTesting-Demo/tree/part1), after this tutorial we'll end up at [this stage](https://github.com/maartenderaedemaeker/Automated-SecurityTesting-Demo/tree/part2).

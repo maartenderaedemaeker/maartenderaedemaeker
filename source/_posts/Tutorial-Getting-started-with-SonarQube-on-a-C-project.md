@@ -11,6 +11,7 @@ permalink: getting-started-with-sonarqube-on-a-csharp-project
 id: 59d3e06faf4f1298d16e0ec1
 updated: '2017-07-26 14:11:00'
 date: 2017-07-23 14:47:21
+author: Maarten De Raedemaeker
 ---
 I'd like to share my journey discovering how to use SonarQube.
 

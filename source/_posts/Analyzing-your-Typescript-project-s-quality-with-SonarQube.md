@@ -1,4 +1,5 @@
 ---
+author: Maarten De Raedemaeker
 title: Analyzing your Typescript project's quality with SonarQube
 tags:
   - SonarQube

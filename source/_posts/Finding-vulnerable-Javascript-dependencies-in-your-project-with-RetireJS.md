@@ -9,6 +9,7 @@ permalink: using-retirejs
 id: 59d3e06faf4f1298d16e0ec5
 updated: '2017-09-26 14:59:42'
 date: 2017-07-28 13:51:35
+author: Maarten De Raedemaeker
 ---
 [RetireJS](https://github.com/RetireJS/retire.js) is a tool that allows you to check your javascript dependencies for known vulnerabilities. 
 It works both for client-side dependencies and NodeJs dependencies. 
