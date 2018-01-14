@@ -36,7 +36,7 @@ In this blogpost, I'll be using NUnit as my unit testing framework.
 In my solution, I've added the OpenCover and NUnit.ConsoleRunner nuget packages.
 If I take a look in my packages folder, I can find the corresponding packages.
 
-![2017-11-05-09_13_58-packages](/content/images/2017/11/2017-11-05-09_13_58-packages.png)
+![2017-11-05-09_13_58-packages](/images/2017/11/2017-11-05-09_13_58-packages.png)
 
 We are interested in the following two executables included in these packages:
 * `{OpenCoverFolder}\tools\OpenCover.Console.exe`
@@ -59,7 +59,7 @@ Let's take a closer look at the command:
 
 When running the command, we can see NUnit running the test and the code coverage results being written.
 
-![2017-11-05-09_31_16-Cmder](/content/images/2017/11/2017-11-05-09_31_16-Cmder.png)
+![2017-11-05-09_31_16-Cmder](/images/2017/11/2017-11-05-09_31_16-Cmder.png)
 
 <a name="coverage-results"></a>
 # Adding test coverage results to SonarQube
@@ -101,4 +101,4 @@ We can do this by modifying step 1 and specifying the `sonar.cs.opencover.report
 
 SonarQube will pick up our code coverage and show it in our projects dashboard:
 
-![2017-11-05-11_09_47-SonarQubeNUnitIntegrationDemo](/content/images/2017/11/2017-11-05-11_09_47-SonarQubeNUnitIntegrationDemo.png)
+![2017-11-05-11_09_47-SonarQubeNUnitIntegrationDemo](/images/2017/11/2017-11-05-11_09_47-SonarQubeNUnitIntegrationDemo.png)

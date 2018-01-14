@@ -41,4 +41,4 @@ sonar-scanner -D "sonar.projectKey=<projectname>"
 
 As we can see, our project shows up in the dashboard.
 
-![SonarTs_1](/content/images/2017/09/SonarTs_1.png)
+![SonarTs_1](/images/2017/09/SonarTs_1.png)
