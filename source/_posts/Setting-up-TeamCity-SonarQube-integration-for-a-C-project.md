@@ -11,7 +11,7 @@ categories:
 permalink: setting-up-teamcity-sonarqube-integration-for-a-csharp-project
 id: 59d3e06faf4f1298d16e0ec2
 updated: '2017-08-26 19:31:51'
-date: 2017-07-23 14:55:06
+date: 2017-07-22 14:55:06
 author: Maarten De Raedemaeker
 ---
 This blog post follows my previous post ["Getting started with SonarQube on a C# project"](/2017/07/23/getting-started-with-sonarqube-on-a-csharp-project/).
