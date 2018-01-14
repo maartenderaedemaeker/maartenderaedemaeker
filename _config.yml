@@ -3,11 +3,12 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo
+title: Maarten De Raedemaeker
 subtitle:
 description:
-author: John Doe
-language:
+author: Maarten De Raedemaeker
+language: 
+- en
 timezone:
 
 # URL

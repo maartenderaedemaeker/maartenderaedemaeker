@@ -1,0 +1,3 @@
+[submodule "themes/beantech"]
+	path = themes/beantech
+	url = https://github.com/YenYuHsuan/hexo-theme-beantech/
