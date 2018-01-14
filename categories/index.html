@@ -10,8 +10,6 @@
 
     <!--Description-->
     
-        <meta name="description" content="RetireJS is a tool that allows you to check your javascript dependencies for known vulnerabilities.It works both for client-side dependencies and Node">
-    
 
     <!--Author-->
     
@@ -20,7 +18,7 @@
 
     <!--Open Graph Title-->
     
-        <meta property="og:title" content="Finding vulnerable Javascript dependencies in your project with RetireJS"/>
+        <meta property="og:title" content="categories"/>
     
 
     <!--Open Graph Description-->
@@ -42,7 +40,7 @@
 
     <!-- Title -->
     
-    <title>Finding vulnerable Javascript dependencies in your project with RetireJS - Maarten De Raedemaeker</title>
+    <title>categories - Maarten De Raedemaeker</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
@@ -146,99 +144,43 @@
 </nav>
 
     <!-- Main Content -->
-    <!-- Page Header -->
-<!-- Set your background image for this header in your post front-matter: cover -->
-
-<header class="intro-header" style="background-image: url('/images/theming/background.png')">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <div class="post-heading">
-                    <h1>Finding vulnerable Javascript dependencies in your project with RetireJS</h1>
-                    
-                    <span class="meta">
-                        <!-- Date and Author -->
-                        
-                            Posted by Maarten De Raedemaeker on
-                        
-                        
-                            2017-07-28
-                        
-                    </span>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
-
-<!-- Post Content -->
-<article>
-    <div class="container">
-        <div class="row">
-
-            <!-- Tags and categories -->
-           
-                <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 post-tags">
-                    
-                        
+    
 
 
-<a href="/tags/Security-Testing/">#Security Testing</a> <a href="/tags/Javascript/">#Javascript</a>
-
-
-                    
-                </div>
-                <div class="col-lg-4 col-md-5 post-categories">
-                    
-                        
-
-<a href="/categories/Software-development/">Software development</a>
-
-                    
-                </div>
-            
-
-            <!-- Gallery -->
-            
-
-            <!-- Post Main Content -->
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <p><a href="https://github.com/RetireJS/retire.js" target="_blank" rel="noopener">RetireJS</a> is a tool that allows you to check your javascript dependencies for known vulnerabilities.<br>It works both for client-side dependencies and NodeJs dependencies.<br>You can find the demo project used in this blog post <a href="https://github.com/maartenderaedemaeker/RetireJsDemo" target="_blank" rel="noopener">here</a>.</p>
-<h1 id="Table-of-contents"><a href="#Table-of-contents" class="headerlink" title="Table of contents"></a>Table of contents</h1><ul>
-<li><a href="#owasp">OWASP Top 10: using vulnerable dependencies</a></li>
-<li><a href="#commandline">Using retirejs from the command line</a></li>
-<li><a href="#next-steps">Possible next steps</a></li>
-</ul>
-<h1 id="OWASP-Top-10-using-vulnerable-dependencies"><a href="#OWASP-Top-10-using-vulnerable-dependencies" class="headerlink" title="OWASP Top 10: using vulnerable dependencies"></a><a name="owasp"></a>OWASP Top 10: using vulnerable dependencies</h1><p>In this post I’ll try to get a way of helping to prevent one of the risks described in the OWASP top 10: using components with known vulnerabilities. If you’re unfamiliar with the concept, you can take a look at <a href="https://maartenderaedemaeker.be/2017/08/13/using-owasp-dependency-check/#owaspTopTen" target="_blank" rel="noopener">my post about solving this issue for a .NET project</a>.</p>
-<h1 id="Command-line-version"><a href="#Command-line-version" class="headerlink" title=" Command line version"></a><a name="commandline"></a> Command line version</h1><p>The command-line version can be installed using npm.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g retire</span><br></pre></td></tr></table></figure></p>
-<p>You can call retire by executing <figure class="highlight plain"><figcaption><span>in the command-line.</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">You might prefer to keep it as a local dependency instead of a global one. You can do it like this:</span><br></pre></td></tr></table></figure></p>
-<p>npm install retire –save-dev<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">You can execute it like this: ```node node_modules/retire/bin/retire```.</span><br><span class="line">You&apos;ll notice that it seems bit inconvenient, so you can add a script to your package.json to make it easier to access.</span><br></pre></td></tr></table></figure></p>
-<p>“scripts”: {<br>      “retire”: “node node_modules/retire/bin/retire”<br>  },<br><code>Now you can run it by executing</code>npm run retire```.</p>
-<p>When we run it, we can see a list of vulnerabilities found in our project.<br>We can also redirect it to a file using the <code>--outputpath</code> argument.</p>
-<p>You will probably get an output resembling <a href="https://gist.github.com/maartenderaedemaeker/2ff80d960c971514ce6fd589c3e31bd8" target="_blank" rel="noopener">this</a>.</p>
-<h1 id="Possible-next-steps"><a href="#Possible-next-steps" class="headerlink" title=" Possible next steps"></a><a name="next-steps"></a> Possible next steps</h1><p>You could integrate running this process in your local development process, or integrate it in your build server. You could for example make your build fail based on the exit code retirejs returns. You could also include it in a Zed Attack Proxy scan (see <a href="https://maartenderaedemaeker.be/2017/08/27/getting-started-with-zed-attack-proxy" target="_blank" rel="noopener">my previous post about ZAP</a>), there is a plugin enabling scanning of client-side dependencies for vulnerabilities, you can find out more about it <a href="https://github.com/h3xstream/burp-retire-js" target="_blank" rel="noopener">here</a>. At the moment of writing, the plugin is still in alpha stage though.</p>
-
-
-                
-            </div>
-
-            <!-- Comments -->
-            
+    <header class="intro-header" style="background-image: url('/images/theming/background.png')">
+        <div class="container">
+            <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                    
-    <hr />
-    <h3>Comments:</h3>
-    <div id="disqus_thread">
-        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-    </div>
-
-
-
+                    <div class="site-heading">
+                        <h1>categories</h1>
+                    </div>
                 </div>
-            
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-preview">
+    <a href="/categories/Software-development/">
+        <h1 class="post-title archive">
+            Software development
+        </h1>
+    </a>
+</div>
+                
+                <div class="archive-before-pagination"></div>
+            </div>
         </div>
     </div>
-</article>
+
+
+
+
+
 
     <!-- Footer -->
     <hr />
