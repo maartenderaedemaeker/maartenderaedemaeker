@@ -80,4 +80,4 @@ theme: clean-blog
 deploy:
   type: git
   repo: https://github.com/maartenderaedemaeker/maartenderaedemaeker
-  branch: master
+  branch: gh-pages
