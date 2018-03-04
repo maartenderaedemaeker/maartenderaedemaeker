@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en,default">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+    
+        <meta name="description" content="Table of contents
+Introduction
+OWASP Top 10
+OWASP Zed Attack Proxy
+Setting up ZAP
+Setting up the attack context
+Executing your first attack
+Conclusion">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="Maarten De Raedemaeker">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="Getting started with OWASP Zed Attack Proxy (ZAP)"/>
+    
+
+    <!--Open Graph Description-->
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="Maarten De Raedemaeker"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+        <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>Getting started with OWASP Zed Attack Proxy (ZAP) - Maarten De Raedemaeker</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+    <!-- Google Analytics -->
+    
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-97880416-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+
+
+    <!-- favicon -->
+    
+    <link rel="icon" href="/images/theming/favicon.png">
+    
+	
+</head>
+
+
+<body>
+
+    <!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Maarten De Raedemaeker</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/archives">
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/tags">
+                            
+                                Tags
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/categories">
+                            
+                                Categories
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="https://github.com/maartenderaedemaeker">
+                            
+                                <i class="fa fa-github fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
+<header class="intro-header" style="background-image: url('/images/theming/background.png')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Getting started with OWASP Zed Attack Proxy (ZAP)</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                            Posted by Maarten De Raedemaeker on
+                        
+                        
+                            2017-08-27
+                        
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+                <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 post-tags">
+                    
+                        
+
+
+<a href="/tags/C/">#C#</a> <a href="/tags/NET/">#.NET</a> <a href="/tags/Security-Testing/">#Security Testing</a> <a href="/tags/Zed-attack-proxy/">#Zed attack proxy</a>
+
+
+                    
+                </div>
+                <div class="col-lg-4 col-md-5 post-categories">
+                    
+                        
+
+<a href="/categories/Software-development/">Software development</a>
+
+                    
+                </div>
+            
+
+            <!-- Gallery -->
+            
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <h1 id="Table-of-contents"><a href="#Table-of-contents" class="headerlink" title="Table of contents"></a>Table of contents</h1><ul>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#owasp-top-ten">OWASP Top 10</a></li>
+<li><a href="#zap">OWASP Zed Attack Proxy</a></li>
+<li><a href="#setup">Setting up ZAP</a></li>
+<li><a href="#context">Setting up the attack context</a></li>
+<li><a href="#attack">Executing your first attack</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
+</ul>
+<h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a><a name="intro"></a>Introduction</h1><p>In this blogpost I’ll attempt to explain how to get started with Zed Attack Proxy (ZAP) and how to set up your first attack. It speaks for itself that  <strong>you ONLY attack applications you own or have explicit permission to attack</strong>.<br>The source code used for this blog post can be found <a href="https://github.com/maartenderaedemaeker/Automated-SecurityTesting-Demo/tree/vulnerabilities-example" target="_blank" rel="noopener">on github</a>.</p>
+<h1 id="OWASP-Top-10"><a href="#OWASP-Top-10" class="headerlink" title="OWASP Top 10"></a><a name="owasp-top-ten"></a>OWASP Top 10</h1><p>OWASP (Open web application security project) is an organization trying improve awareness about web application security issues.<br>Every few years they create a top 10 of web application security risks. They categorize the risks based on how common the issues are and the impact when the risk is exploited. You can find out more about them on <a href="https://www.owasp.org/index.php/Main_Page" target="_blank" rel="noopener">their website</a>.</p>
+<h1 id="The-OWASP-Zed-attack-proxy-project"><a href="#The-OWASP-Zed-attack-proxy-project" class="headerlink" title="The OWASP Zed attack proxy project"></a><a name="zap"></a>The OWASP Zed attack proxy project</h1><p>OWASP Zed Attack Proxy is an open source security tool maintained by OWASP. It can be used to find security issues in your web application. It acts as a <a href="https://en.wikipedia.org/wiki/Reverse_proxy" target="_blank" rel="noopener">reverse proxy</a> server so it can sit in the middle and observe / modify your browser traffic. You can do an automated scan where the spider tool crawls through your application while executing attacks or manually execute specific targetted attacks. You can use the Fuzzer tool to modify a specific part of your request with random data or words from word lists to try find vulnerabilies. Zap can be extended with plugins. Which can be installed from the ‘marketplace’ in the application. Beware though, since some of them are used to try testing exploiting vulnerablities using malicious files, your antivirus will probably go crazy. </p>
+<p>To add some clearity to the input fuzzing concept:</p>
+<p><blockquote class="twitter-tweet" data-lang="nl"><p lang="nl" dir="ltr">QA Engineer walks into a bar. Orders a beer. Orders 0 beers. Orders 999999999 beers. Orders a lizard. Orders -1 beers. Orders a sfdeljknesv.</p>&mdash; Bill Sempf (@sempf) <a href="https://twitter.com/sempf/status/514473420277694465" target="_blank" rel="noopener">23 september 2014</a></blockquote></p>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<h1 id="Setting-up-ZAP"><a href="#Setting-up-ZAP" class="headerlink" title="Setting up ZAP"></a><a name="setup"></a>Setting up ZAP</h1><p>To be able to get started with ZAP, we need to install the application from <a href="http://www.zaproxy.org/" target="_blank" rel="noopener">their site</a>. Since ZAP acts as a reverse proxy, we need to setup our browser proxy settings to point to ZAP, so our requests get tunneled.<br>By default, the proxy port is set to ‘8080’. You can change this by clicking on ‘Tools’ &gt; ‘Options’ &gt; ‘Local proxy’, as shown in the image below.<br><img src="/images/2017/08/10/ZAP-Proxy.png" alt="ZAP-Proxy"></p>
+<p>If you want to intercept HTTPS traffic, you’ll also need to generate &amp; trust a new SSL certificate. This can also be done from the ‘Tools’ &gt; ‘Options’ menu, but this time selecting the ‘Dynamic SSL Certificates’.</p>
+<p><img src="/images/2017/08/10/ZAP-Cert.png" alt="ZAP-Cert"></p>
+<p>From here, you can save the certificate to a local file and install the certificate as trusted locally.</p>
+<p>In your browser, make sure to set the proxy settings accordingly. You could install a tool like <a href="https://chrome.google.com/webstore/detail/foxyproxy-basic/dookpfaalaaappcdneeahomimbllocnb" target="_blank" rel="noopener">Foxy proxy (for chrome)</a> or other tools to be able to easily enable / disable the proxy settings.</p>
+<p>Once everything is setup correctly and you visit a site in your browser it will be added to the “Sites” tab in ZAP. You’ll notice any site you visit turns up here, so before we execute any real attacks, we’ll want to make sure our <a href="#context">attack context</a> is set up properly, so we don’t attack anything we do not have permission for.</p>
+<p><img src="/images/2017/08/10/Sites.png" alt="Sites"></p>
+<h1 id="Settings-up-the-attack-context"><a href="#Settings-up-the-attack-context" class="headerlink" title="Settings up the attack context"></a><a name="context"></a>Settings up the attack context</h1><p>Before we start executing attacks, it is important to set up our context so that we don’t accidentually attack anything we shouldn’t.<br>While just browsing, you can right click on the site, select ‘include in context’ &gt; ‘new context’.</p>
+<p><img src="/images/2017/08/10/configuring_context.png" alt="configuring_context"></p>
+<p>After we configured the sites we want to test, we’ll also delete / disable the default context by right clicking it and selecting delete or disable.</p>
+<p>You can start a quick scan by entering your site’s url in the quick start menu.</p>
+<p><img src="/images/2017/08/10/Quick-scan.png" alt="Quick-scan"></p>
+<h1 id="Executing-your-first-attack"><a href="#Executing-your-first-attack" class="headerlink" title="Executing your first attack"></a><a name="attack"></a>Executing your first attack</h1><p>For the demo purposes of my application I’ve created two vulnerabilities in my application. A SQL injection issue and an XSS flaw. You can take a look at the source <a href="https://github.com/maartenderaedemaeker/Automated-SecurityTesting-Demo/blob/vulnerabilities-example/SecurityTestingDemo/Controllers/VulnerabilityController.cs" target="_blank" rel="noopener">here</a>.</p>
+<ul>
+<li>The SQL injection.</li>
+</ul>
+<p>The SQL injection is quite straight forward. I have a table where I display all the ‘employees’ the current user is ‘supervisor’ for. You can also filter on a name. The url would be something like this ‘/Vulnerability/SqlInjection?name=Test’. When the user is not logged in, this shows something like this:</p>
+<p><img src="/images/2017/08/10/Sql_example.png" alt="Sql_example">.</p>
+<p>In the code we can see the query is built using string concatenation.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">var query = $&quot;SELECT Id, Name, PhoneNumber, DateOfBirth FROM Employees WHERE SupervisorId=&apos;&#123;userId&#125;&apos;&quot;;</span><br><span class="line"></span><br><span class="line">if (name != null)</span><br><span class="line">&#123;</span><br><span class="line">    query += $&quot; AND name = &apos;&#123;name&#125;&apos;&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Let’s see if ZAP can find any SQL injection issues here.</p>
+<p>We’ll right click the url, click attack and start scan.</p>
+<p><img src="/images/2017/08/10/url_list.png" alt="url_list"></p>
+<p><img src="/images/2017/08/10/active_scan.png" alt="active_scan"></p>
+<p>And, as we expect, ZAP has found an issue:</p>
+<p><img src="/images/2017/08/10/sql-inject.png" alt="sql-inject"></p>
+<p>We can even get all data to show up with the right request. When getting <code>/Vulnerability/SqlInjection?name=&#39; OR &#39;&#39; = &#39;</code><br>The application just shows all data.</p>
+<p><img src="/images/2017/08/10/injected.png" alt="injected"></p>
+<ul>
+<li>XSS</li>
+</ul>
+<p>I have to admit I had to do a lot wrong to be able to create an XSS vulnerability in my ASP.NET MVC application.</p>
+<p>First of all I needed to use <code>@Html.Raw(Model)</code> in my view, instead of a safe variant, but then still it would not work, I had to set <code>[ValidateInput(false)]]</code> on my controller. Even then my browser was fighting back (even without adding any CSP headers!).</p>
+<p><img src="/images/2017/08/10/xss_chrome.png" alt="xss_chrome"></p>
+<p>(I know the error message in chrome is in dutch, it basically says chrome has detected unexpected code on the page and has blocked it to protect user data).</p>
+<p>Turns out I also had to add the <code>X-XSS-Protection</code> header with value ‘0’. To be able to avoid chrome’s interference. </p>
+<p>Seems like our framework does a lot for us here already :).<br>After these modifications ZAP found the Cross site scripting issue.</p>
+<p><img src="/images/2017/08/10/xss.png" alt="xss"></p>
+<h1 id="Conclusion"><a href="#Conclusion" class="headerlink" title=" Conclusion"></a><a name="conclusion"></a> Conclusion</h1><p>Zed attack proxy helps us developers to be able do quite a bit of testing on our applications to find security related issues. It is rather easy to get started with it, and can help us getting started in improving our web application security.</p>
+
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+    <hr />
+    <h3>Comments:</h3>
+    <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </div>
+
+
+
+                </div>
+            
+        </div>
+    </div>
+</article>
+
+    <!-- Footer -->
+    <hr />
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+
+                    
+
+                    
+                        <li>
+                            <a href="https://github.com/maartenderaedemaeker" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+                        <li>
+                            <a href="https://www.linkedin.com/in/maartenderaedemaeker/" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; 2018 Maarten De Raedemaeker<br></p>
+               </div>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- After footer scripts -->
+    
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Disqus Comments -->
+
+<script type="text/javascript">
+    var disqus_shortname = 'maarten-de-raedemaeker';
+
+    (function(){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+</body>
+
+</html>
