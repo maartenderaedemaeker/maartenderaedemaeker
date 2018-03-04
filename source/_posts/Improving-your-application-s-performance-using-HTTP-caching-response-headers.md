@@ -1,7 +1,6 @@
 ---
 title: Improving your application's performance using HTTP caching response headers
-tags: |-
-
+tags:
   - HTTP
   - Caching
   - Performance
