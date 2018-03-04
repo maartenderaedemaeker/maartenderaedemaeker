@@ -8,9 +8,10 @@ categories:
 permalink: using-retirejs
 id: 59d3e06faf4f1298d16e0ec5
 updated: '2017-09-26 14:59:42'
-date: 2017-07-28 13:51:35
+date: '2017-07-28 13:51:35'
 author: Maarten De Raedemaeker
 ---
+
 [RetireJS](https://github.com/RetireJS/retire.js) is a tool that allows you to check your javascript dependencies for known vulnerabilities. 
 It works both for client-side dependencies and NodeJs dependencies. 
 You can find the demo project used in this blog post [here](https://github.com/maartenderaedemaeker/RetireJsDemo).
@@ -23,23 +24,36 @@ You can find the demo project used in this blog post [here](https://github.com/m
 In this post I'll try to get a way of helping to prevent one of the risks described in the OWASP top 10: using components with known vulnerabilities. If you're unfamiliar with the concept, you can take a look at [my post about solving this issue for a .NET project](https://maartenderaedemaeker.be/2017/08/13/using-owasp-dependency-check/#owaspTopTen).
 # <a name="commandline"></a> Command line version
 The command-line version can be installed using npm. 
+
 ```
 npm install -g retire
 ```
 
-You can call retire by executing ```retire``` in the command-line.
+You can call retire by executing 
+
+```
+retire
+```
+
+
+in the command-line.
 
 You might prefer to keep it as a local dependency instead of a global one. You can do it like this:
 ```
 npm install retire --save-dev
 ```
 
-You can execute it like this: ```node node_modules/retire/bin/retire```.
-You'll notice that it seems bit inconvenient, so you can add a script to your package.json to make it easier to access.
+You can execute it like this: 
 ```
+node node_modules/retire/bin/retire
+```
+
+You'll notice that it seems bit inconvenient, so you can add a script to your package.json to make it easier to access.
+
+````
 "scripts": {
 	  "retire": "node node_modules/retire/bin/retire"
-  },
+},
 ```
 Now you can run it by executing ```npm run retire```.
 
